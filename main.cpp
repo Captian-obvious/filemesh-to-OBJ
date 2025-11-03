@@ -109,7 +109,23 @@ int main(int argc,char** argv){
             if (mesh.header.sizeof_mesh2Vertex==36){
                 mesh2VertexNoColor temp;
                 fread(&mesh2VertexNoColor,sizeof(mesh2VertexNoColor),1,fd);
-                
+                // the below code is very cursed, but gets the job done for no color vertexes
+                verts[i].px = temp.px;
+                verts[i].py = temp.py;
+                verts[i].pz = temp.pz;
+                verts[i].nx = temp.nx;
+                verts[i].ny = temp.ny;
+                verts[i].nz = temp.nz;
+                verts[i].tu = temp.tu;
+                verts[i].tv = temp.tv;
+                verts[i].tx = temp.tx;
+                verts[i].ty = temp.ty;
+                verts[i].tz = temp.tz;
+                verts[i].ts = temp.ts;
+                verts[i].r = 255;
+                verts[i].g = 255;
+                verts[i].b = 255;
+                verts[i].a = 255;
             }
         };
     };
