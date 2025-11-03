@@ -24,17 +24,19 @@ typedef struct {
     sbyte tx,ty,tz,ts;
     byte r,g,b,a; // THIS IS NOT ALWAYS INCLUDED!
 } mesh2Vertex;
-typedef struct {
-    uint a;
-    uint b;
-    uint c;
-} mesh2Face;
+
 typedef struct {
     float px,py,pz;
     float nx,ny,nz;
     float tu,tv;
     sbyte tx,ty,tz,ts;
 } mesh2VertexNoColor;
+
+typedef struct {
+    uint a;
+    uint b;
+    uint c;
+} mesh2Face;
 
 typedef struct {
     mesh2Head header;
