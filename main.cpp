@@ -47,8 +47,12 @@ typedef struct {
     mesh2Face* faces;
 } mesh2;
 
+void print_info(std::string msg){
+    std::cout << msg << std:endl;
+};
+
 int main(int argc,char** argv){
-    if (argc>1){
-        std::string path=argv[1];
+    if (argc<2){
+        print_info("Usage:");
     };
 };
