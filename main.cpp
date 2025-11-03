@@ -44,6 +44,6 @@ typedef struct {
 
 int main(int argc,char** argv){
     if (argc>1){
-        // adding soon
+        std::string path=argv[1];
     };
 };
