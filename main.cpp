@@ -53,6 +53,6 @@ void print_info(std::string msg){
 
 int main(int argc,char** argv){
     if (argc<2){
-        print_info("Usage:");
+        std::cout << "Usage: " << argv[0] << "<filemesh path> <opt: output OBJ path>";
     };
 };
