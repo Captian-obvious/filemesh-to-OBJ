@@ -106,9 +106,10 @@ int main(int argc,char** argv){
         mesh2Vertex* verts=new mesh2Vertex[mesh.header.vert_cnt];
         mesh.faces=new mesh2Face[mesh.header.face_cnt];
         for (uint i=0;i<mesh.header.vert_cnt;i++){
-            if (mesh.header.sizeof_mesh2Vertex==36){
+            byte vertexSize=mesh.header.sizeof_mesh2Vertex;
+            if (vertexSize==36){
                 mesh2VertexNoColor temp;
-                fread(&mesh2VertexNoColor,sizeof(mesh2VertexNoColor),1,fd);
+                fread(&temp,sizeof(mesh2VertexNoColor),1,fd);
                 // the below code is very cursed, but gets the job done for no color vertexes
                 verts[i].px = temp.px;
                 verts[i].py = temp.py;
@@ -126,7 +127,7 @@ int main(int argc,char** argv){
                 verts[i].g = 255;
                 verts[i].b = 255;
                 verts[i].a = 255;
-            }else if(sizeof_mesh2Vertex==40){
+            }else if(vertexSize==40){
                 //normal vertex logic
                 fread(&verts[i],sizeof(mesh2Vertex),1,fd);
             }else{
