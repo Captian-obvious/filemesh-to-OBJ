@@ -76,6 +76,7 @@ int main(int argc,char** argv){
     FILE* fd=fopen(path.c_str(), "rb");
     if (!fd){
         print_err("Failed to open file "+path);
+        return 1;
     };
     char ver[32]={0};
     //I hate this line with a burning passion but its all we got so.
@@ -93,4 +94,11 @@ int main(int argc,char** argv){
             break;
         };
     };
+    if (!supported){
+        print_err("File Version not supported.");
+        fclose(fd);
+        return 1;
+    };
+    print_info("FileMesh v"+version+" file detected. Parsing...");
+    
 };
