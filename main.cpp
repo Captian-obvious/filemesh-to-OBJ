@@ -32,6 +32,7 @@ typedef struct {
 
 typedef struct {
     mesh2Head header;
+    mesh2Vertex
 } mesh2;
 
 int main(int argc,char** argv){
