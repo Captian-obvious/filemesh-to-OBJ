@@ -103,5 +103,7 @@ int main(int argc,char** argv){
     if (version=="2.00"){
         mesh2 mesh;
         fread(&mesh.header,sizeof(mesh2Head),1,fd);
+        mesh2Vertex* verts=new mesh2Vertex[mesh.header.vert_cnt];
+        mesh.faces=new mesh2Face[mesh.header.face_cnt];
     };
 };
