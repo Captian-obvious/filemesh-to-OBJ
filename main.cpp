@@ -1,7 +1,10 @@
 #include <cstdio>
 #include <cstdlib>
 #include <iostream>
+#include <sstream>
 #include <string>
+#include <vector>
+#include <format>
 #include <unordered_map>
 /*NOTE:
 All FileMesh versions start with "version (version)\n", INCLUDING binary ones
@@ -52,6 +55,16 @@ void print_info(std::string msg){
 };
 void print_err(std::string msg){
     std::cout << msg << std:endl;
+};
+
+std::vector<std::string> split(const std::string &s,const char separator=' '){
+    std::vector<std::string> tokens;
+    std::string token;
+    std::istringstream tokenStream(s);
+    while (std::getline(tokenStream,token,separator)){
+        tokens.push_back(token);
+    };
+    return tokens;
 };
 
 int main(int argc,char** argv){
