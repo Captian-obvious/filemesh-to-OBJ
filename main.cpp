@@ -86,5 +86,11 @@ int main(int argc,char** argv){
     if (!version.empty() && version.back()="\n"){
         version.pop_back();
     };
-    
+    bool supported=false;
+    for (const char* v:supportedVersions){
+        if (version==v){
+            supported=true;
+            break;
+        };
+    };
 };
