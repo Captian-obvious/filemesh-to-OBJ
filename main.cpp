@@ -7,6 +7,7 @@
 typedef unsigned char byte;
 typedef signed char sbyte;
 
+const char* supportedVersions[] = {"1.00", "1.01", "2.00"};
 typedef struct {
     unsigned short sizeof_mesh2Head;
     byte sizeof_mesh2Vertex;
@@ -37,8 +38,8 @@ typedef struct {
 
 typedef struct {
     mesh2Head header;
-    mesh2Vertex verts[header.vert_cnt];
-    mesh2Face faces[header.face_cnt];
+    mesh2Vertex* verts;
+    mesh2Face* faces;
 } mesh2;
 
 int main(int argc,char** argv){
