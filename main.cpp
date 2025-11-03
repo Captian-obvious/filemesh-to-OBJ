@@ -50,6 +50,9 @@ typedef struct {
 void print_info(std::string msg){
     std::cout << msg << std:endl;
 };
+void print_err(std::string msg){
+    std::cout << msg << std:endl;
+};
 
 int main(int argc,char** argv){
     if (argc<2){
@@ -57,6 +60,8 @@ int main(int argc,char** argv){
         return 1;
     };
     std::string path = argv[1];
-    FILE* fp=fopen(path.c_str(), "rb");
-    
+    FILE* fd=fopen(path.c_str(), "rb");
+    if (!fd){
+        print_err("Failed to open file "+path);
+    };
 };
