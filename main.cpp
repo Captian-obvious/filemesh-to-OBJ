@@ -100,5 +100,6 @@ int main(int argc,char** argv){
         return 1;
     };
     print_info("FileMesh v"+version+" file detected. Parsing...");
-    
+    mesh2 mesh;
+    fread(&mesh.header,sizeof(mesh2Head),1,fd);
 };
