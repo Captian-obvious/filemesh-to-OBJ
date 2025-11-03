@@ -126,7 +126,13 @@ int main(int argc,char** argv){
                 verts[i].g = 255;
                 verts[i].b = 255;
                 verts[i].a = 255;
-            }
+            }else if(sizeof_mesh2Vertex==40){
+                //normal vertex logic
+                fread(&verts[i],sizeof(mesh2Vertex),1,fd);
+            }else{
+                print_err("Vertex length invalid.");
+                break;
+            };
         };
     };
 };
