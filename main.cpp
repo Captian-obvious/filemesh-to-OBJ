@@ -83,5 +83,7 @@ int main(int argc,char** argv){
     std::string vStr(ver);
     size_t space_pos=vStr.find(" ");
     std::string version=(space_pos!= std::string::npos) ? vStr.substr(space_pos + 1) : "";
-    
+    if (!version.empty() && version.back()="\n"){
+        
+    }
 };
