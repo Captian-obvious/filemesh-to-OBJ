@@ -105,5 +105,12 @@ int main(int argc,char** argv){
         fread(&mesh.header,sizeof(mesh2Head),1,fd);
         mesh2Vertex* verts=new mesh2Vertex[mesh.header.vert_cnt];
         mesh.faces=new mesh2Face[mesh.header.face_cnt];
+        for (uint i=0;i<mesh.header.vert_cnt;i++){
+            if (mesh.header.sizeof_mesh2Vertex==36){
+                mesh2VertexNoColor temp;
+                fread(&mesh2VertexNoColor,sizeof(mesh2VertexNoColor),1,fd);
+                
+            }
+        };
     };
 };
