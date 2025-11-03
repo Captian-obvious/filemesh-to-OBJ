@@ -77,4 +77,6 @@ int main(int argc,char** argv){
     if (!fd){
         print_err("Failed to open file "+path);
     };
+    char versionLine[32]={0};
+    fgets(versionLine,sizeof(versionLine),fd);
 };
