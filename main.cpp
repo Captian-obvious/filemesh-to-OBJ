@@ -56,4 +56,7 @@ int main(int argc,char** argv){
         std::cout << "Usage: " << argv[0] << "<filemesh path> <opt: output OBJ path>";
         return 1;
     };
+    std::string path = argv[1];
+    FILE* fp=fopen(path.c_str(), "rb");
+    
 };
