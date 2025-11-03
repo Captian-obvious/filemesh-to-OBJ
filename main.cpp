@@ -24,6 +24,11 @@ typedef struct {
     byte r,g,b,a; // THIS IS NOT ALWAYS INCLUDED!
 } mesh2Vertex;
 typedef struct {
+    uint a;
+    uint b;
+    uint c;
+} mesh2Face;
+typedef struct {
     float px,py,pz;
     float nx,ny,nz;
     float tu,tv;
@@ -32,7 +37,8 @@ typedef struct {
 
 typedef struct {
     mesh2Head header;
-    mesh2Vertex
+    mesh2Vertex verts[header.vert_cnt];
+    mesh2Face faces[header.face_cnt];
 } mesh2;
 
 int main(int argc,char** argv){
