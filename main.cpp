@@ -12,8 +12,8 @@ All FileMesh versions start with "version (version)\n", INCLUDING binary ones
 
 typedef unsigned char byte;
 typedef signed char sbyte;
-
-const char* supportedVersions[] = {"1.00", "1.01", "2.00"};
+// support soon: "1.00", "1.01"
+const char* supportedVersions[] = {"2.00"};
 typedef struct {
     unsigned short sizeof_mesh2Head;
     byte sizeof_mesh2Vertex;
