@@ -51,10 +51,10 @@ typedef struct {
 } mesh2;
 
 void print_info(std::string msg){
-    std::cout << msg << std:endl;
+    std::cout << msg << std::endl;
 };
 void print_err(std::string msg){
-    std::cout << msg << std:endl;
+    std::cout << msg << std::endl;
 };
 
 std::vector<std::string> split(const std::string &s,const char separator=' '){
@@ -80,4 +80,5 @@ int main(int argc,char** argv){
     char versionLine[32]={0};
     //I hate this line with a burning passion but its all we got so.
     fgets(versionLine,sizeof(versionLine),fd);
+    
 };
