@@ -3,6 +3,9 @@
 #include <iostream>
 #include <string>
 #include <unordered_map>
+/*NOTE:
+All FileMesh versions start with "version (version)\n", INCLUDING binary ones
+*/
 
 typedef unsigned char byte;
 typedef signed char sbyte;
