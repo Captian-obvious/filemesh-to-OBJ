@@ -132,7 +132,9 @@ int main(int argc,char** argv){
                 fread(&verts[i],sizeof(mesh2Vertex),1,fd);
             }else{
                 print_err("Vertex length invalid.");
-                break;
+                delete[] verts;
+                fclose(fd);
+                return 1;
             };
         };
         mesh.verts=verts;
