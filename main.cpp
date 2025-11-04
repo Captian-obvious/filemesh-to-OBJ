@@ -119,8 +119,6 @@ int main(int argc,char** argv){
         mesh2 mesh;
         size_t readBytes=fread(&mesh.header,sizeof(mesh2Head),1,fd);
         meshVertex* verts=new meshVertex[mesh.header.vert_cnt];
-        mesh.faces=new meshFace[mesh.header.face_cnt];
-        print_info("Polygon Count (triangles): "+std::to_string(mesh.header.face_cnt));
         for (uint i=0;i<mesh.header.vert_cnt;i++){
             byte vertexSize=mesh.header.sizeof_meshVertex;
             if (vertexSize==36){
@@ -154,6 +152,8 @@ int main(int argc,char** argv){
             };
         };
         mesh.verts=verts;
+        mesh.faces=new meshFace[mesh.header.face_cnt];
+        print_info("Polygon Count (triangles): "+std::to_string(mesh.header.face_cnt));
         readBytes=fread(mesh.faces,sizeof(meshFace),mesh.header.face_cnt,fd);
         delete[] verts;
         delete[] mesh.faces;
@@ -162,8 +162,6 @@ int main(int argc,char** argv){
         mesh3 mesh;
         size_t readBytes=fread(&mesh.header,sizeof(mesh3Head),1,fd);
         meshVertex* verts=new meshVertex[mesh.header.vert_cnt];
-        mesh.faces=new meshFace[mesh.header.face_cnt];
-        print_info("Polygon Count (triangles): "+std::to_string(mesh.header.face_cnt));
         for (uint i=0;i<mesh.header.vert_cnt;i++){
             byte vertexSize=mesh.header.sizeof_meshVertex;
             if (vertexSize==36){
@@ -197,6 +195,8 @@ int main(int argc,char** argv){
             };
         };
         mesh.verts=verts;
+        mesh.faces=new meshFace[mesh.header.face_cnt];
+        print_info("Polygon Count (triangles): "+std::to_string(mesh.header.face_cnt));
         readBytes=fread(mesh.faces,sizeof(meshFace),mesh.header.face_cnt,fd);
         //additional data for LOD stuff
         mesh.lod_offsets = new uint[mesh.header.lod_offset_cnt];
