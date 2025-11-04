@@ -207,7 +207,7 @@ int main(int argc,char** argv){
         };
         delete[] verts;
         delete[] mesh.faces;
-        //delete[] mesh.lod_offsets;
+        delete[] mesh.lod_offsets;
         fclose(fd);
     };
     return 0;
