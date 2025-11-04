@@ -7,10 +7,10 @@ SRC = main.cpp
 all: $(TARGET)
 
 $(TARGET): $(SRC)
-    $(CXX) $(CXXFLAGS) -o $(TARGET) $(SRC)
+	$(CXX) $(CXXFLAGS) -o $(TARGET) $(SRC)
 check:
-    ls | grep fmtoobj
+	ls | grep fmtoobj
 distcheck:
-    ./fmtoobj
+	./fmtoobj
 clean:
-    rm -f $(TARGET)
+	rm -f $(TARGET)
