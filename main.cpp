@@ -95,7 +95,7 @@ int main(int argc,char** argv){
     };
     char ver[32]={0};
     //I hate this line with a burning passion but its all we got so.
-    fgets(ver,sizeof(ver),fd);
+    char* browhy=fgets(ver,sizeof(ver),fd);
     std::string vStr(ver);
     size_t space_pos=vStr.find(" ");
     std::string version=(space_pos!= std::string::npos) ? vStr.substr(space_pos + 1) : "";
