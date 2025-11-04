@@ -8,6 +8,9 @@ all: $(TARGET)
 
 $(TARGET): $(SRC)
     $(CXX) $(CXXFLAGS) -o $(TARGET) $(SRC)
-
+check:
+    ls | grep fmtoobj
+distcheck:
+    ./fmtoobj
 clean:
     rm -f $(TARGET)
