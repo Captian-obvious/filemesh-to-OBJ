@@ -4,7 +4,6 @@
 #include <sstream>
 #include <string>
 #include <vector>
-#include <format>
 #include <unordered_map>
 /*NOTE:
 All FileMesh versions start with "version (version)\n", INCLUDING binary ones
