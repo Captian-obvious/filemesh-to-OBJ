@@ -67,6 +67,22 @@ typedef struct {
 } meshVertexNoColor;
 
 typedef struct {
+    byte subset_indexes;
+    byte bone_weights;
+} meshSkinning;
+
+typedef struct {
+    uint bone_name_ind;
+    unsigned short parent_ind;
+    unsigned short lod_parent_ind;
+    float culling;
+	float r00,r01,r02;
+	float r10,r11,r12;
+	float r20,r21,r22;
+	float x,y,z;
+} meshBone;
+
+typedef struct {
     uint a;
     uint b;
     uint c;
