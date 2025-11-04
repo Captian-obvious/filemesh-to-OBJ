@@ -98,20 +98,29 @@ std::string convert_to_obj(mesh2& mesh){
 };
 std::string convert_to_obj(mesh3& mesh){
     std::string objData="# Generated from FileMesh v3.00/v3.01\n";
-    uint mainOffset=mesh.lod_offsets[0];
-    uint mainEndOffset=(mesh.header.face_cnt>=2) ? mesh.lod_offsets[1] : mesh.header.face_cnt;
     for (uint i=0;i<mesh.header.vert_cnt;i++){
         objData+="v "+std::to_string(mesh.verts[i].px)+" "+std::to_string(mesh.verts[i].py)+" "+std::to_string(mesh.verts[i].pz)+"\n";
         objData+="vn "+std::to_string(mesh.verts[i].nx)+" "+std::to_string(mesh.verts[i].ny)+" "+std::to_string(mesh.verts[i].nz)+"\n";
         objData+="vt "+std::to_string(mesh.verts[i].tu)+" "+std::to_string(mesh.verts[i].tv)+"\n";
     };
-    for (uint i=0;i<mainEndOffset;i++){
-        objData+="f "+std::to_string(mesh.faces[i].a+1)+"/"+std::to_string(mesh.faces[i].a+1)+"/"+std::to_string(mesh.faces[i].a+1)+" "+
-                          std::to_string(mesh.faces[i].b+1)+"/"+std::to_string(mesh.faces[i].b+1)+"/"+std::to_string(mesh.faces[i].b+1)+" "+
-                          std::to_string(mesh.faces[i].c+1)+"/"+std::to_string(mesh.faces[i].c+1)+"/"+std::to_string(mesh.faces[i].c+1)+"\n";
+    int meshesWritten=0;
+    for (uint i=0;i<mesh.header.lod_offset_cnt;i++){
+        objData+="# LOD Mesh "+std::to_string(i)+" Offset: "+std::to_string(mesh.lod_offsets[i])+"\n";
+        meshesWritten++;
+        startOffset=mesh.lod_offsets[i];
+        uint endOffset=(i+1<mesh.header.lod_offset_cnt) ? mesh.lod_offsets[i+1] : mesh.header.face_cnt;
+        if (i>0){
+            objData+="# LOD Mesh "+std::to_string(i)+" faces commented out.\n";
+        };
+        for (uint mi=startOffset;mi<endOffset;mi++){
+            if (i>0){
+                objData+="# ";
+            };
+            objData+="f "+std::to_string(mesh.faces[mi].a+1)+"/"+std::to_string(mesh.faces[mi].a+1)+"/"+std::to_string(mesh.faces[mi].a+1)+" "+
+                            std::to_string(mesh.faces[mi].b+1)+"/"+std::to_string(mesh.faces[mi].b+1)+"/"+std::to_string(mesh.faces[mi].b+1)+" "+
+                            std::to_string(mesh.faces[mi].c+1)+"/"+std::to_string(mesh.faces[mi].c+1)+"/"+std::to_string(mesh.faces[mi].c+1)+"\n";
+        };
     };
-    // commented LOD meshes
-    
     return objData;
 };
 void print_usage(char** argv){
