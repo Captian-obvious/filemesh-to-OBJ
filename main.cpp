@@ -107,7 +107,7 @@ std::string convert_to_obj(mesh3& mesh){
     for (uint i=0;i<mesh.header.lod_offset_cnt;i++){
         objData+="# LOD Mesh "+std::to_string(i)+" Offset: "+std::to_string(mesh.lod_offsets[i])+"\n";
         meshesWritten++;
-        startOffset=mesh.lod_offsets[i];
+        uint startOffset=mesh.lod_offsets[i];
         uint endOffset=(i+1<mesh.header.lod_offset_cnt) ? mesh.lod_offsets[i+1] : mesh.header.face_cnt;
         if (i>0){
             objData+="# LOD Mesh "+std::to_string(i)+" faces commented out.\n";
