@@ -15,5 +15,6 @@ distcheck:
 	./fmtoobj ./test/testv2.mesh
 	./fmtoobj ./test/testv3.mesh
 	./fmtoobj ./test/testv4.mesh
+	./fmtoobj ./test/testv5.mesh
 clean:
 	rm -f $(TARGET)
