@@ -97,7 +97,18 @@ std::string convert_to_obj(mesh2& mesh){
     return objData;
 };
 std::string convert_to_obj(mesh3& mesh){
+    std::string objData="# Generated from FileMesh v3.00/v3.01\n";
     std::string objData="# Generated from FileMesh v2.00\n";
+    for (uint i=0;i<mesh.header.vert_cnt;i++){
+        objData+="v "+std::to_string(mesh.verts[i].px)+" "+std::to_string(mesh.verts[i].py)+" "+std::to_string(mesh.verts[i].pz)+"\n";
+        objData+="vn "+std::to_string(mesh.verts[i].nx)+" "+std::to_string(mesh.verts[i].ny)+" "+std::to_string(mesh.verts[i].nz)+"\n";
+        objData+="vt "+std::to_string(mesh.verts[i].tu)+" "+std::to_string(mesh.verts[i].tv)+"\n";
+    };
+    for (uint i=0;i<mesh.header.face_cnt;i++){
+        objData+="f "+std::to_string(mesh.faces[i].a+1)+"/"+std::to_string(mesh.faces[i].a+1)+"/"+std::to_string(mesh.faces[i].a+1)+" "+
+                          std::to_string(mesh.faces[i].b+1)+"/"+std::to_string(mesh.faces[i].b+1)+"/"+std::to_string(mesh.faces[i].b+1)+" "+
+                          std::to_string(mesh.faces[i].c+1)+"/"+std::to_string(mesh.faces[i].c+1)+"/"+std::to_string(mesh.faces[i].c+1)+"\n";
+    };
     return objData;
 };
 
@@ -132,6 +143,14 @@ int main(int argc,char** argv){
         print_err("File Version not supported.");
         fclose(fd);
         return 1;
+    };
+    bool no_output=false;
+    for (uint i=0;i<argc;i++){
+        if (argv[i]==std::string("--no-output")){
+            print_info("No output flag detected, exiting after parsing.");
+            no_output=true;
+            break;
+        };
     };
     print_info("FileMesh v"+version+" file detected. Parsing...");
     if (version=="2.00"){
@@ -175,18 +194,20 @@ int main(int argc,char** argv){
         print_info("Polygon Count (triangles): "+std::to_string(mesh.header.face_cnt));
         readBytes=fread(mesh.faces,sizeof(meshFace),mesh.header.face_cnt,fd);
         std::string objData=convert_to_obj(mesh);
-        if (argc>=3){
-            std::string outPath=argv[2];
-            FILE* outFd=fopen(outPath.c_str(),"w");
-            if (!outFd){
-                print_err("Failed to open output file "+outPath);
+        if (!no_output){
+            if (argc>=3){
+                std::string outPath=argv[2];
+                FILE* outFd=fopen(outPath.c_str(),"w");
+                if (!outFd){
+                    print_err("Failed to open output file "+outPath);
+                }else{
+                    fwrite(objData.c_str(),1,objData.size(),outFd);
+                    fclose(outFd);
+                    print_info("OBJ file written to "+outPath);
+                };
             }else{
-                fwrite(objData.c_str(),1,objData.size(),outFd);
-                fclose(outFd);
-                print_info("OBJ file written to "+outPath);
+                std::cout << objData << std::endl;
             };
-        }else{
-            std::cout << objData << std::endl;
         };
         delete[] verts;
         delete[] mesh.faces;
@@ -237,6 +258,21 @@ int main(int argc,char** argv){
         if (readBytes!=mesh.header.lod_offset_cnt) {
             print_err("Failed to read LOD offsets.");
             return 1;
+        };
+        if (!no_output){
+            if (argc>=3){
+                std::string outPath=argv[2];
+                FILE* outFd=fopen(outPath.c_str(),"w");
+                if (!outFd){
+                    print_err("Failed to open output file "+outPath);
+                }else{
+                    fwrite(objData.c_str(),1,objData.size(),outFd);
+                    fclose(outFd);
+                    print_info("OBJ file written to "+outPath);
+                };
+            }else{
+                std::cout << objData << std::endl;
+            };
         };
         delete[] verts;
         delete[] mesh.faces;

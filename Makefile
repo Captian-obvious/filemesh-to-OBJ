@@ -12,9 +12,9 @@ check:
 	ls | grep fmtoobj
 distcheck:
 	echo "Testing reading..."
-	./fmtoobj ./test/testv2.mesh
-	./fmtoobj ./test/testv3.mesh
-	./fmtoobj ./test/testv4.mesh
-	./fmtoobj ./test/testv5.mesh
+	./fmtoobj ./test/testv2.mesh --no-output
+	./fmtoobj ./test/testv3.mesh --no-output
+	./fmtoobj ./test/testv4.mesh --no-output
+	./fmtoobj ./test/testv5.mesh --no-output
 clean:
 	rm -f $(TARGET)
