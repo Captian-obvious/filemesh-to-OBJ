@@ -99,12 +99,13 @@ std::string convert_to_obj(mesh2& mesh){
 std::string convert_to_obj(mesh3& mesh){
     std::string objData="# Generated from FileMesh v3.00/v3.01\n";
     uint mainOffset=mesh.lod_offsets[0];
+    uint mainEndOffset=(mesh.header.face_cnt>=2) ? mesh.lod_offsets[1] : mesh.header.face_cnt;
     for (uint i=0;i<mesh.header.vert_cnt;i++){
         objData+="v "+std::to_string(mesh.verts[i].px)+" "+std::to_string(mesh.verts[i].py)+" "+std::to_string(mesh.verts[i].pz)+"\n";
         objData+="vn "+std::to_string(mesh.verts[i].nx)+" "+std::to_string(mesh.verts[i].ny)+" "+std::to_string(mesh.verts[i].nz)+"\n";
         objData+="vt "+std::to_string(mesh.verts[i].tu)+" "+std::to_string(mesh.verts[i].tv)+"\n";
     };
-    for (uint i=0;i<mainOffset;i++){
+    for (uint i=0;i<mainEndOffset;i++){
         objData+="f "+std::to_string(mesh.faces[i].a+1)+"/"+std::to_string(mesh.faces[i].a+1)+"/"+std::to_string(mesh.faces[i].a+1)+" "+
                           std::to_string(mesh.faces[i].b+1)+"/"+std::to_string(mesh.faces[i].b+1)+"/"+std::to_string(mesh.faces[i].b+1)+" "+
                           std::to_string(mesh.faces[i].c+1)+"/"+std::to_string(mesh.faces[i].c+1)+"/"+std::to_string(mesh.faces[i].c+1)+"\n";
