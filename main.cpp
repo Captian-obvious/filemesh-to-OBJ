@@ -98,7 +98,6 @@ std::string convert_to_obj(mesh2& mesh){
 };
 std::string convert_to_obj(mesh3& mesh){
     std::string objData="# Generated from FileMesh v3.00/v3.01\n";
-    std::string objData="# Generated from FileMesh v2.00\n";
     for (uint i=0;i<mesh.header.vert_cnt;i++){
         objData+="v "+std::to_string(mesh.verts[i].px)+" "+std::to_string(mesh.verts[i].py)+" "+std::to_string(mesh.verts[i].pz)+"\n";
         objData+="vn "+std::to_string(mesh.verts[i].nx)+" "+std::to_string(mesh.verts[i].ny)+" "+std::to_string(mesh.verts[i].nz)+"\n";
