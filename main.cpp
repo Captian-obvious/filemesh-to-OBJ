@@ -82,6 +82,25 @@ std::vector<std::string> split(const std::string &s,const char separator=' '){
     return tokens;
 };
 
+std::string convert_to_obj(mesh2& mesh){
+    std::string objData="# Generated from FileMesh v2.00\n";
+    for (uint i=0;i<mesh.header.vert_cnt;i++){
+        objData+="v "+std::to_string(mesh.verts[i].px)+" "+std::to_string(mesh.verts[i].py)+" "+std::to_string(mesh.verts[i].pz)+"\n";
+        objData+="vn "+std::to_string(mesh.verts[i].nx)+" "+std::to_string(mesh.verts[i].ny)+" "+std::to_string(mesh.verts[i].nz)+"\n";
+        objData+="vt "+std::to_string(mesh.verts[i].tu)+" "+std::to_string(mesh.verts[i].tv)+"\n";
+    };
+    for (uint i=0;i<mesh.header.face_cnt;i++){
+        objData+="f "+std::to_string(mesh.faces[i].a+1)+"/"+std::to_string(mesh.faces[i].a+1)+"/"+std::to_string(mesh.faces[i].a+1)+" "+
+                          std::to_string(mesh.faces[i].b+1)+"/"+std::to_string(mesh.faces[i].b+1)+"/"+std::to_string(mesh.faces[i].b+1)+" "+
+                          std::to_string(mesh.faces[i].c+1)+"/"+std::to_string(mesh.faces[i].c+1)+"/"+std::to_string(mesh.faces[i].c+1)+"\n";
+    };
+    return objData;
+};
+std::string convert_to_obj(mesh3& mesh){
+    std::string objData="# Generated from FileMesh v2.00\n";
+    return objData;
+};
+
 int main(int argc,char** argv){
     if (argc<2){
         std::cout << "Usage: " << argv[0] << " <filemesh path> <opt: output OBJ path>" << std::endl;
@@ -227,23 +246,4 @@ int main(int argc,char** argv){
         print_info("yes");
     };
     return 0;
-};
-
-std::string convert_to_obj(mesh2& mesh){
-    std::string objData="# Generated from FileMesh v2.00\n";
-    for (uint i=0;i<mesh.header.vert_cnt;i++){
-        objData+="v "+std::to_string(mesh.verts[i].px)+" "+std::to_string(mesh.verts[i].py)+" "+std::to_string(mesh.verts[i].pz)+"\n";
-        objData+="vn "+std::to_string(mesh.verts[i].nx)+" "+std::to_string(mesh.verts[i].ny)+" "+std::to_string(mesh.verts[i].nz)+"\n";
-        objData+="vt "+std::to_string(mesh.verts[i].tu)+" "+std::to_string(mesh.verts[i].tv)+"\n";
-    };
-    for (uint i=0;i<mesh.header.face_cnt;i++){
-        objData+="f "+std::to_string(mesh.faces[i].a+1)+"/"+std::to_string(mesh.faces[i].a+1)+"/"+std::to_string(mesh.faces[i].a+1)+" "+
-                          std::to_string(mesh.faces[i].b+1)+"/"+std::to_string(mesh.faces[i].b+1)+"/"+std::to_string(mesh.faces[i].b+1)+" "+
-                          std::to_string(mesh.faces[i].c+1)+"/"+std::to_string(mesh.faces[i].c+1)+"/"+std::to_string(mesh.faces[i].c+1)+"\n";
-    };
-    return objData;
-};
-std::string convert_to_obj(mesh3& mesh){
-    std::string objData="# Generated from FileMesh v2.00\n";
-    return objData;
 };
