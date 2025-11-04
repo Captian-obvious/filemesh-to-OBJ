@@ -259,6 +259,7 @@ int main(int argc,char** argv){
             print_err("Failed to read LOD offsets.");
             return 1;
         };
+        std::string objData=convert_to_obj(mesh);
         if (!no_output){
             if (argc>=3){
                 std::string outPath=argv[2];
