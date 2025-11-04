@@ -44,6 +44,13 @@ typedef struct {
     byte unused;
 } mesh4Head;
 
+enum meshLodType {
+    None = 0,
+	Unknown = 1,
+	RbxSimplifier = 2,
+	ZeuxMeshOptimizer = 3,
+};
+
 typedef struct {
     float px,py,pz;
     float nx,ny,nz;
