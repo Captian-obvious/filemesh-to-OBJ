@@ -11,6 +11,6 @@ $(TARGET): $(SRC)
 check:
 	ls | grep fmtoobj
 distcheck:
-	./fmtoobj
+	./fmtoobj ./test/testv2.mesh
 clean:
 	rm -f $(TARGET)
