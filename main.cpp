@@ -15,7 +15,7 @@ typedef signed char sbyte;
 // support soon: "1.00", "1.01"
 const char* supportedVersions[] = {"2.00","3.00","3.01"};
 typedef struct {
-    unsigned short sizeof_mesh2Head;
+    ushort sizeof_mesh2Head;
     byte sizeof_meshVertex;
     byte sizeof_meshFace;
     uint vert_cnt;
@@ -23,11 +23,11 @@ typedef struct {
 } mesh2Head;
 
 typedef struct {
-    unsigned short sizeof_mesh3Head;
+    ushort sizeof_mesh3Head;
     byte sizeof_meshVertex;
     byte sizeof_meshFace;
-    unsigned short sizeof_lod_offset;
-    unsigned short lod_offset_cnt;
+    ushort sizeof_lod_offset;
+    ushort lod_offset_cnt;
     uint vert_cnt;
     uint face_cnt;
 } mesh3Head;
