@@ -59,6 +59,13 @@ typedef struct {
     meshFace* faces;
 } mesh2;
 
+typedef struct {
+    mesh2Head header;
+    meshVertex* verts;
+    meshFace* faces;
+    uint* lod_offsets;
+} mesh3;
+
 void print_info(std::string msg){
     std::cout << msg << std::endl;
 };
