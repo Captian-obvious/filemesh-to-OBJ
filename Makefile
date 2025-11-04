@@ -22,5 +22,11 @@ distcheck:
 	./fmtoobj ./test/testv4.mesh -o ./test/testv4.obj
 	./fmtoobj ./test/testv5.mesh -o ./test/testv5.obj
 	ls ./test | grep .obj
+	echo "All tests passed."
+	echo "Moving to BUILD directory..."
+	mkdir -p BUILD
+	mv fmtoobj BUILD/
+	mv ./test/*.obj BUILD/
+	echo "Distribution check complete."
 clean:
 	rm -f $(TARGET)

@@ -23,4 +23,9 @@ jobs:
       run: make check
     - name: make distcheck
       run: make distcheck
+    - name: capture artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-artifacts
+        path: ./build
       
