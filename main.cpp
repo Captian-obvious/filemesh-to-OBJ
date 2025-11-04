@@ -159,7 +159,7 @@ int main(int argc,char** argv){
         delete[] verts;
         delete[] mesh.faces;
         fclose(fd);
-    }else if (version=="2.00"){
+    }else if (version=="3.00" or version=="3.01"){
         mesh3 mesh;
         fread(&mesh.header,sizeof(mesh3Head),1,fd);
         meshVertex* verts=new meshVertex[mesh.header.vert_cnt];
