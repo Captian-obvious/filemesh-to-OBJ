@@ -170,7 +170,7 @@ int main(int argc,char** argv){
             if (vertexSize==36){
                 meshVertexNoColor temp;
                 fread(&temp,sizeof(meshVertexNoColor),1,fd);
-                // the below code is very cursed, but gets the job done for no color vertexes
+                // the below code is also very cursed, but gets the job done for no color vertexes
                 verts[i].px = temp.px;
                 verts[i].py = temp.py;
                 verts[i].pz = temp.pz;
