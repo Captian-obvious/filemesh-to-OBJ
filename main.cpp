@@ -105,6 +105,7 @@ int main(int argc,char** argv){
         fread(&mesh.header,sizeof(mesh2Head),1,fd);
         mesh2Vertex* verts=new mesh2Vertex[mesh.header.vert_cnt];
         mesh.faces=new mesh2Face[mesh.header.face_cnt];
+        print_info("Polygon Count (triangles): "+std::to_string(mesh.header.face_cnt));
         for (uint i=0;i<mesh.header.vert_cnt;i++){
             byte vertexSize=mesh.header.sizeof_mesh2Vertex;
             if (vertexSize==36){
