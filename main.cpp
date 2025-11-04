@@ -204,4 +204,5 @@ int main(int argc,char** argv){
         delete[] mesh.faces;
         fclose(fd);
     };
+    return 0;
 };
