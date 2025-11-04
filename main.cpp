@@ -90,7 +90,7 @@ typedef struct {
 
 typedef struct {
     uint faces_begin;
-    uint faces_lengthl
+    uint faces_length;
     uint verts_begin;
     uint verts_length;
     uint bone_ind_cnt;
