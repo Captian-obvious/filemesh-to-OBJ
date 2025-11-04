@@ -62,7 +62,7 @@ typedef struct {
     mesh3Head header;
     meshVertex* verts;
     meshFace* faces;
-    uint* lod_offsets;
+    uint[] lod_offsets;
 } mesh3;
 
 void print_info(std::string msg){
@@ -199,7 +199,7 @@ int main(int argc,char** argv){
         mesh.verts=verts;
         readBytes=fread(mesh.faces,sizeof(meshFace),mesh.header.face_cnt,fd);
         //additional data for LOD stuff
-        readBytes=fread(mesh.lod_offsets,mesh.header.sizeof_lod_offset,mesh.header.lod_offset_cnt,fd);
+        readBytes=fread(&mesh.lod_offsets,mesh.header.sizeof_lod_offset,mesh.header.lod_offset_cnt,fd);
         delete[] verts;
         delete[] mesh.faces;
         fclose(fd);
