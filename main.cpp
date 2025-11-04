@@ -155,6 +155,20 @@ int main(int argc,char** argv){
         mesh.faces=new meshFace[mesh.header.face_cnt];
         print_info("Polygon Count (triangles): "+std::to_string(mesh.header.face_cnt));
         readBytes=fread(mesh.faces,sizeof(meshFace),mesh.header.face_cnt,fd);
+        std::string objData=convert_to_obj(mesh);
+        if (argc>=3){
+            std::string outPath=argv[2];
+            FILE* outFd=fopen(outPath.c_str(),"w");
+            if (!outFd){
+                print_err("Failed to open output file "+outPath);
+            }else{
+                fwrite(objData.c_str(),1,objData.size(),outFd);
+                fclose(outFd);
+                print_info("OBJ file written to "+outPath);
+            };
+        }else{
+            std::cout << objData << std::endl;
+        };
         delete[] verts;
         delete[] mesh.faces;
         fclose(fd);
@@ -215,16 +229,21 @@ int main(int argc,char** argv){
     return 0;
 };
 
-std::string convert_to_obj(mesh2& mesh,std::string outputPath){
+std::string convert_to_obj(mesh2& mesh){
     std::string objData="# Generated from FileMesh v2.00\n";
     for (uint i=0;i<mesh.header.vert_cnt;i++){
         objData+="v "+std::to_string(mesh.verts[i].px)+" "+std::to_string(mesh.verts[i].py)+" "+std::to_string(mesh.verts[i].pz)+"\n";
         objData+="vn "+std::to_string(mesh.verts[i].nx)+" "+std::to_string(mesh.verts[i].ny)+" "+std::to_string(mesh.verts[i].nz)+"\n";
         objData+="vt "+std::to_string(mesh.verts[i].tu)+" "+std::to_string(mesh.verts[i].tv)+"\n";
     };
+    for (uint i=0;i<mesh.header.face_cnt;i++){
+        objData+="f "+std::to_string(mesh.faces[i].a+1)+"/"+std::to_string(mesh.faces[i].a+1)+"/"+std::to_string(mesh.faces[i].a+1)+" "+
+                          std::to_string(mesh.faces[i].b+1)+"/"+std::to_string(mesh.faces[i].b+1)+"/"+std::to_string(mesh.faces[i].b+1)+" "+
+                          std::to_string(mesh.faces[i].c+1)+"/"+std::to_string(mesh.faces[i].c+1)+"/"+std::to_string(mesh.faces[i].c+1)+"\n";
+    };
     return objData;
 };
-std::string convert_to_obj(mesh3& mesh,std::string outputPath){
+std::string convert_to_obj(mesh3& mesh){
     std::string objData="# Generated from FileMesh v2.00\n";
     return objData;
 };
