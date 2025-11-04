@@ -60,7 +60,7 @@ typedef struct {
 } mesh2;
 
 typedef struct {
-    mesh2Head header;
+    mesh3Head header;
     meshVertex* verts;
     meshFace* faces;
     uint* lod_offsets;
