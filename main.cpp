@@ -202,7 +202,7 @@ int main(int argc,char** argv){
         std::cout << "LOD offset count: " << mesh.header.lod_offset_cnt << std::endl;
         std::cout << "LOD offset size: " << mesh.header.sizeof_lod_offset << std::endl;
         mesh.lod_offsets = new uint[mesh.header.lod_offset_cnt];
-        readBytes=fread(&mesh.lod_offsets,mesh.header.sizeof_lod_offset,mesh.header.lod_offset_cnt,fd);
+        /*readBytes=fread(&mesh.lod_offsets,mesh.header.sizeof_lod_offset,mesh.header.lod_offset_cnt,fd);
         if (readBytes!=mesh.header.lod_offset_cnt) {
             print_err("Failed to read LOD offsets.");
             return 1;
