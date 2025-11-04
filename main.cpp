@@ -209,6 +209,8 @@ int main(int argc,char** argv){
         delete[] mesh.faces;
         delete[] mesh.lod_offsets;
         fclose(fd);
+    }else if(version=="4.00" or version=="4.01"){
+        print_info("yes");
     };
     return 0;
 };
