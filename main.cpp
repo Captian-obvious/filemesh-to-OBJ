@@ -159,5 +159,11 @@ int main(int argc,char** argv){
         delete[] verts;
         delete[] mesh.faces;
         fclose(fd);
+    }else if (version=="2.00"){
+        mesh3 mesh;
+        fread(&mesh.header,sizeof(mesh3Head),1,fd);
+        meshVertex* verts=new meshVertex[mesh.header.vert_cnt];
+        mesh.faces=new meshFace[mesh.header.face_cnt];
+        print_info("Polygon Count (triangles): "+std::to_string(mesh.header.face_cnt));
     };
 };
