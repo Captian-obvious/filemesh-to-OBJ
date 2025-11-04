@@ -272,7 +272,7 @@ int main(int argc,char** argv){
         std::string objData=convert_to_obj(mesh);
         if (!no_output){
             if (argc>=3){
-                std::string outPath=argv[2];
+                std::string outPath=argv[outputOffset];
                 FILE* outFd=fopen(outPath.c_str(),"w");
                 if (!outFd){
                     print_err("Failed to open output file "+outPath);
