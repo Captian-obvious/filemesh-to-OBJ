@@ -26,8 +26,8 @@ typedef struct {
     unsigned short sizeof_mesh3Head;
     byte sizeof_meshVertex;
     byte sizeof_meshFace;
-    unsigned short sizeof_LodOffset;
-    unsigned short LodOffset_cnt;
+    unsigned short sizeof_lod_offset;
+    unsigned short lod_offset_cnt;
     uint vert_cnt;
     uint face_cnt;
 } mesh3Head;
