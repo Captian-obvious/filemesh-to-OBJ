@@ -89,6 +89,15 @@ typedef struct {
 } meshFace;
 
 typedef struct {
+    uint faces_begin;
+    uint faces_lengthl
+    uint verts_begin;
+    uint verts_length;
+    uint bone_ind_cnt;
+    unsigned short bone_inds[26];
+} meshSubset;
+
+typedef struct {
     mesh2Head header;
     meshVertex* verts;
     meshFace* faces;
@@ -100,6 +109,17 @@ typedef struct {
     meshFace* faces;
     uint* lod_offsets;
 } mesh3;
+
+typedef struct {
+    mesh4Head header;
+    meshVertex* verts;
+    meshSkinning* skinning;
+    meshFace* faces;
+    uint* lod_offsets;
+    meshBone* bones;
+    byte* bone_names;
+    meshSubset* subsets;
+} mesh4;
 
 void print_info(std::string msg){
     std::cout << msg << std::endl;
