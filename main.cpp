@@ -16,16 +16,16 @@ typedef signed char sbyte;
 const char* supportedVersions[] = {"2.00"};
 typedef struct {
     unsigned short sizeof_mesh2Head;
-    byte sizeof_mesh2Vertex;
-    byte sizeof_mesh2Face;
+    byte sizeof_meshVertex;
+    byte sizeof_meshFace;
     uint vert_cnt;
     uint face_cnt;
 } mesh2Head;
 
 typedef struct {
-    unsigned short sizeof_mesh2Head;
-    byte sizeof_mesh2Vertex;
-    byte sizeof_mesh2Face;
+    unsigned short sizeof_mesh3Head;
+    byte sizeof_meshVertex;
+    byte sizeof_meshFace;
     unsigned short sizeof_LodOffset;
     unsigned short LodOffset_cnt;
     uint vert_cnt;
@@ -38,25 +38,25 @@ typedef struct {
     float tu,tv;
     sbyte tx,ty,tz,ts;
     byte r,g,b,a; // THIS IS NOT ALWAYS INCLUDED!
-} mesh2Vertex;
+} meshVertex;
 
 typedef struct {
     float px,py,pz;
     float nx,ny,nz;
     float tu,tv;
     sbyte tx,ty,tz,ts;
-} mesh2VertexNoColor;
+} meshVertexNoColor;
 
 typedef struct {
     uint a;
     uint b;
     uint c;
-} mesh2Face;
+} meshFace;
 
 typedef struct {
     mesh2Head header;
-    mesh2Vertex* verts;
-    mesh2Face* faces;
+    meshVertex* verts;
+    meshFace* faces;
 } mesh2;
 
 void print_info(std::string msg){
@@ -112,14 +112,14 @@ int main(int argc,char** argv){
     if (version=="2.00"){
         mesh2 mesh;
         fread(&mesh.header,sizeof(mesh2Head),1,fd);
-        mesh2Vertex* verts=new mesh2Vertex[mesh.header.vert_cnt];
-        mesh.faces=new mesh2Face[mesh.header.face_cnt];
+        meshVertex* verts=new meshVertex[mesh.header.vert_cnt];
+        mesh.faces=new meshFace[mesh.header.face_cnt];
         print_info("Polygon Count (triangles): "+std::to_string(mesh.header.face_cnt));
         for (uint i=0;i<mesh.header.vert_cnt;i++){
-            byte vertexSize=mesh.header.sizeof_mesh2Vertex;
+            byte vertexSize=mesh.header.sizeof_meshVertex;
             if (vertexSize==36){
-                mesh2VertexNoColor temp;
-                fread(&temp,sizeof(mesh2VertexNoColor),1,fd);
+                meshVertexNoColor temp;
+                fread(&temp,sizeof(meshVertexNoColor),1,fd);
                 // the below code is very cursed, but gets the job done for no color vertexes
                 verts[i].px = temp.px;
                 verts[i].py = temp.py;
@@ -139,7 +139,7 @@ int main(int argc,char** argv){
                 verts[i].a = 255;
             }else if(vertexSize==40){
                 //normal vertex logic
-                fread(&verts[i],sizeof(mesh2Vertex),1,fd);
+                fread(&verts[i],sizeof(meshVertex),1,fd);
             }else{
                 print_err("Vertex length invalid.");
                 delete[] verts;
@@ -148,7 +148,7 @@ int main(int argc,char** argv){
             };
         };
         mesh.verts=verts;
-        fread(mesh.faces,sizeof(mesh2Face),mesh.header.face_cnt,fd);
+        fread(mesh.faces,sizeof(meshFace),mesh.header.face_cnt,fd);
         delete[] verts;
         delete[] mesh.faces;
         fclose(fd);
