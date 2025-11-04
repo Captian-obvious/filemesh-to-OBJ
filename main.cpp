@@ -112,7 +112,7 @@ int main(int argc,char** argv){
     if (!supported){
         print_err("File Version not supported.");
         fclose(fd);
-        return 1;
+        return 0;
     };
     print_info("FileMesh v"+version+" file detected. Parsing...");
     if (version=="2.00"){
