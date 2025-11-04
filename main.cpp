@@ -135,5 +135,10 @@ int main(int argc,char** argv){
                 break;
             };
         };
+        mesh.verts=verts;
+        fread(mesh.faces,sizeof(mesh2Face),mesh.header.face_cnt,fd);
+        delete[] verts;
+        delete[] mesh.faces;
+        fclose(fd);
     };
 };
