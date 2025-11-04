@@ -197,8 +197,9 @@ int main(int argc,char** argv){
             };
         };
         mesh.verts=verts;
+        print_info("Reading " + std::to_string(mesh.header.face_cnt) + " faces...");
+        print_info("Face size: " + std::to_string(sizeof(meshFace)) + " bytes");
         readBytes=fread(mesh.faces,sizeof(meshFace),mesh.header.face_cnt,fd);
-        print_info("Reading LOD meshes");
         //additional data for LOD stuff
         mesh.lod_offsets = new uint[mesh.header.lod_offset_cnt];
         readBytes=fread(&mesh.lod_offsets,mesh.header.sizeof_lod_offset,mesh.header.lod_offset_cnt,fd);
