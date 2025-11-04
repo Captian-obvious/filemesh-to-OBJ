@@ -110,13 +110,32 @@ std::string convert_to_obj(mesh3& mesh){
     };
     return objData;
 };
-
+void print_usage(char** argv){
+    std::cout << "Usage: " << argv[0] << " <filemesh path> <opt: -o output OBJ path> [--no-output]" << std::endl;
+    std::cout << "Options:" << std::endl;
+    std::cout << "  -o <output OBJ path>   Specify output path for the OBJ file. If not provided, outputs to stdout." << std::endl;
+    std::cout << "  --no-output            Parses the FileMesh file but does not produce any output." << std::endl;
+};
 int main(int argc,char** argv){
     if (argc<2){
-        std::cout << "Usage: " << argv[0] << " <filemesh path> <opt: output OBJ path>" << std::endl;
+        print_usage(argv);
         return 1;
     };
     std::string path = argv[1];
+    bool no_output=false;
+    int outputOffset=0;
+    for (uint i=0;i<argc;i++){
+        if (argv[i]==std::string("--no-output")){
+            print_info("No output flag detected, exiting after parsing.");
+            no_output=true;
+        }else if(argv[i]==std::string("-h") or argv[i]==std::string("--help")){
+            print_usage(argv);
+            return 0;
+        }else if(argv[i]==std::string("-o")){
+            outputOffset=i+1;
+            i++; //skip next arg as its the output path
+        };
+    };
     FILE* fd=fopen(path.c_str(), "rb");
     if (!fd){
         print_err("Failed to open file "+path);
@@ -142,14 +161,6 @@ int main(int argc,char** argv){
         print_err("File Version not supported.");
         fclose(fd);
         return 1;
-    };
-    bool no_output=false;
-    for (uint i=0;i<argc;i++){
-        if (argv[i]==std::string("--no-output")){
-            print_info("No output flag detected, exiting after parsing.");
-            no_output=true;
-            break;
-        };
     };
     print_info("FileMesh v"+version+" file detected. Parsing...");
     if (version=="2.00"){
@@ -195,7 +206,7 @@ int main(int argc,char** argv){
         std::string objData=convert_to_obj(mesh);
         if (!no_output){
             if (argc>=3){
-                std::string outPath=argv[2];
+                std::string outPath=argv[outputOffset];
                 FILE* outFd=fopen(outPath.c_str(),"w");
                 if (!outFd){
                     print_err("Failed to open output file "+outPath);
