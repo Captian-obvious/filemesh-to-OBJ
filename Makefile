@@ -13,6 +13,6 @@ check:
 distcheck:
 	echo "Testing reading..."
 	./fmtoobj ./test/testv2.mesh
-    ./fmtoobj ./test/testv3.mesh
+	./fmtoobj ./test/testv3.mesh
 clean:
 	rm -f $(TARGET)
