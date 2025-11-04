@@ -215,9 +215,10 @@ int main(int argc,char** argv){
     return 0;
 };
 
-void convert_to_obj(mesh2& mesh,std::string outputPath){
+std::string convert_to_obj(mesh2& mesh,std::string outputPath){
     //TODO
+    
 };
-void convert_to_obj(mesh3& mesh,std::string outputPath){
+std::string convert_to_obj(mesh3& mesh,std::string outputPath){
     //TODO
 };
