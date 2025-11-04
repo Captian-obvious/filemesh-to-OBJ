@@ -18,10 +18,19 @@ typedef struct {
     unsigned short sizeof_mesh2Head;
     byte sizeof_mesh2Vertex;
     byte sizeof_mesh2Face;
-
     uint vert_cnt;
     uint face_cnt;
 } mesh2Head;
+
+typedef struct {
+    unsigned short sizeof_mesh2Head;
+    byte sizeof_mesh2Vertex;
+    byte sizeof_mesh2Face;
+    unsigned short sizeof_LodOffset;
+    unsigned short LodOffset_cnt;
+    uint vert_cnt;
+    uint face_cnt;
+} mesh3Head;
 
 typedef struct {
     float px,py,pz;
