@@ -118,7 +118,7 @@ int main(int argc,char** argv){
     print_info("FileMesh v"+version+" file detected. Parsing...");
     if (version=="2.00"){
         mesh2 mesh;
-        fread(&mesh.header,sizeof(mesh2Head),1,fd);
+        size_t readBytes=fread(&mesh.header,sizeof(mesh2Head),1,fd);
         meshVertex* verts=new meshVertex[mesh.header.vert_cnt];
         mesh.faces=new meshFace[mesh.header.face_cnt];
         print_info("Polygon Count (triangles): "+std::to_string(mesh.header.face_cnt));
@@ -126,7 +126,7 @@ int main(int argc,char** argv){
             byte vertexSize=mesh.header.sizeof_meshVertex;
             if (vertexSize==36){
                 meshVertexNoColor temp;
-                fread(&temp,sizeof(meshVertexNoColor),1,fd);
+                readBytes=fread(&temp,sizeof(meshVertexNoColor),1,fd);
                 // the below code is very cursed, but gets the job done for no color vertexes
                 verts[i].px = temp.px;
                 verts[i].py = temp.py;
@@ -146,7 +146,7 @@ int main(int argc,char** argv){
                 verts[i].a = 255;
             }else if(vertexSize==40){
                 //normal vertex logic
-                fread(&verts[i],sizeof(meshVertex),1,fd);
+                readBytes=fread(&verts[i],sizeof(meshVertex),1,fd);
             }else{
                 print_err("Vertex length invalid.");
                 delete[] verts;
@@ -155,13 +155,13 @@ int main(int argc,char** argv){
             };
         };
         mesh.verts=verts;
-        fread(mesh.faces,sizeof(meshFace),mesh.header.face_cnt,fd);
+        readBytes=fread(mesh.faces,sizeof(meshFace),mesh.header.face_cnt,fd);
         delete[] verts;
         delete[] mesh.faces;
         fclose(fd);
     }else if (version=="3.00" or version=="3.01"){
         mesh3 mesh;
-        fread(&mesh.header,sizeof(mesh3Head),1,fd);
+        size_t readBytes=fread(&mesh.header,sizeof(mesh3Head),1,fd);
         meshVertex* verts=new meshVertex[mesh.header.vert_cnt];
         mesh.faces=new meshFace[mesh.header.face_cnt];
         print_info("Polygon Count (triangles): "+std::to_string(mesh.header.face_cnt));
@@ -169,7 +169,7 @@ int main(int argc,char** argv){
             byte vertexSize=mesh.header.sizeof_meshVertex;
             if (vertexSize==36){
                 meshVertexNoColor temp;
-                fread(&temp,sizeof(meshVertexNoColor),1,fd);
+                readBytes=fread(&temp,sizeof(meshVertexNoColor),1,fd);
                 // the below code is also very cursed, but gets the job done for no color vertexes
                 verts[i].px = temp.px;
                 verts[i].py = temp.py;
@@ -189,7 +189,7 @@ int main(int argc,char** argv){
                 verts[i].a = 255;
             }else if(vertexSize==40){
                 //normal vertex logic
-                fread(&verts[i],sizeof(meshVertex),1,fd);
+                readBytes=fread(&verts[i],sizeof(meshVertex),1,fd);
             }else{
                 print_err("Vertex length invalid.");
                 delete[] verts;
@@ -198,9 +198,9 @@ int main(int argc,char** argv){
             };
         };
         mesh.verts=verts;
-        fread(mesh.faces,sizeof(meshFace),mesh.header.face_cnt,fd);
+        readBytes=fread(mesh.faces,sizeof(meshFace),mesh.header.face_cnt,fd);
         //additional data for LOD stuff
-        fread(mesh.lod_offsets,mesh.header.sizeof_lod_offset,mesh.header.lod_offset_cnt,fd);
+        readBytes=fread(mesh.lod_offsets,mesh.header.sizeof_lod_offset,mesh.header.lod_offset_cnt,fd);
         delete[] verts;
         delete[] mesh.faces;
         fclose(fd);
