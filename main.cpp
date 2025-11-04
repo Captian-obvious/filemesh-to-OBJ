@@ -32,6 +32,19 @@ typedef struct {
 } mesh3Head;
 
 typedef struct {
+    unsigned short sizeof_mesh4Head;
+    unsigned short lod_type;
+    uint vert_cnt;
+    uint face_cnt;
+    unsigned short lod_offset_cnt;
+    unsigned short bone_cnt;
+    uint sizeof_bone_names;
+    unsigned short subset_cnt;
+    byte hq_lod_cnt;
+    byte unused;
+} mesh4Head;
+
+typedef struct {
     float px,py,pz;
     float nx,ny,nz;
     float tu,tv;
