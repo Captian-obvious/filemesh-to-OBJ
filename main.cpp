@@ -110,6 +110,8 @@ std::string convert_to_obj(mesh3& mesh){
                           std::to_string(mesh.faces[i].b+1)+"/"+std::to_string(mesh.faces[i].b+1)+"/"+std::to_string(mesh.faces[i].b+1)+" "+
                           std::to_string(mesh.faces[i].c+1)+"/"+std::to_string(mesh.faces[i].c+1)+"/"+std::to_string(mesh.faces[i].c+1)+"\n";
     };
+    // commented LOD meshes
+    
     return objData;
 };
 void print_usage(char** argv){
