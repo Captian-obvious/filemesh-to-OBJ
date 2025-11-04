@@ -197,19 +197,17 @@ int main(int argc,char** argv){
             };
         };
         mesh.verts=verts;
-        print_info("Reading " + std::to_string(mesh.header.face_cnt) + " faces...");
-        print_info("Face size: " + std::to_string(sizeof(meshFace)) + " bytes");
         readBytes=fread(mesh.faces,sizeof(meshFace),mesh.header.face_cnt,fd);
         //additional data for LOD stuff
-        mesh.lod_offsets = new uint[mesh.header.lod_offset_cnt];
+        /*mesh.lod_offsets = new uint[mesh.header.lod_offset_cnt];
         readBytes=fread(&mesh.lod_offsets,mesh.header.sizeof_lod_offset,mesh.header.lod_offset_cnt,fd);
         if (readBytes!=mesh.header.lod_offset_cnt) {
             print_err("Failed to read LOD offsets.");
             return 1;
-        };
+        };*/
         delete[] verts;
         delete[] mesh.faces;
-        delete[] mesh.lod_offsets;
+        //delete[] mesh.lod_offsets;
         fclose(fd);
     };
     return 0;
