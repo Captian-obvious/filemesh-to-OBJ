@@ -84,7 +84,7 @@ std::vector<std::string> split(const std::string &s,const char separator=' '){
 
 int main(int argc,char** argv){
     if (argc<2){
-        std::cout << "Usage: " << argv[0] << "<filemesh path> <opt: output OBJ path>";
+        std::cout << "Usage: " << argv[0] << " <filemesh path> <opt: output OBJ path>" << std::endl;
         return 1;
     };
     std::string path = argv[1];
