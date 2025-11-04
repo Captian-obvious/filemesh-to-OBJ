@@ -26,7 +26,7 @@ typedef struct {
     unsigned short sizeof_mesh3Head;
     byte sizeof_meshVertex;
     byte sizeof_meshFace;
-    unsigned short sizeof_lod_offset;
+    unsigned short sizeof_lod_offset; //unused for some reason, always 4
     unsigned short lod_offset_cnt;
     uint vert_cnt;
     uint face_cnt;
@@ -200,7 +200,7 @@ int main(int argc,char** argv){
         mesh.verts=verts;
         fread(mesh.faces,sizeof(meshFace),mesh.header.face_cnt,fd);
         //additional data for LOD stuff
-        
+        fread(mesh.lod_offsets,mesh.header.sizeof_lod_offset,mesh.header.lod_offset_cnt,fd);
         delete[] verts;
         delete[] mesh.faces;
         fclose(fd);
