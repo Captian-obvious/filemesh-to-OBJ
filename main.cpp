@@ -361,10 +361,12 @@ int main(int argc,char** argv){
     }else if(version=="4.00" or version=="4.01"){
         mesh4 mesh;
         size_t readBytes=fread(&mesh.header,sizeof(mesh4Head),1,fd);
+        mesh.verts==new meshVertex[mesh.header.vert_cnt];
         readBytes=fread(mesh.verts,sizeof(meshVertex),mesh.header.vert_cnt,fd);
         if (mesh.header.bone_cnt>0){
-
-        }
+            mesh.skinning=new meshSkinning[mesh.header.vert_cnt];
+            readBytes=fread(mesh.skinning,sizeof(meshSkinning),mesh.header.vert_cnt,fd);
+        };
     };
     return 0;
 };
