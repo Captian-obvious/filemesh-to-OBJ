@@ -382,10 +382,13 @@ int main(int argc,char** argv){
             print_err("Failed to read bones.");
             return 1;
         };
+        mesh.bone_names=new byte[mesh.header.sizeof_bone_names];
+        readBytes=fread(mesh.bone_names,mesh.header.sizeof_bone_names,1,fd);
         delete[] mesh.verts;
         delete[] mesh.faces;
         delete[] mesh.lod_offsets;
         delete[] mesh.bones;
+        delete[] mesh.bone_names;
         fclose(fd);
     };
     return 0;
