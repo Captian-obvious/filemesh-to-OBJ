@@ -413,6 +413,7 @@ int main(int argc,char** argv){
         readBytes=fread(mesh.bone_names,mesh.header.sizeof_bone_names,1,fd);
         mesh.subsets=new meshSubset[mesh.header.subset_cnt];
         readBytes=fread(mesh.subsets,sizeof(meshSubset),mesh.header.subset_cnt,fd);
+        std::string objData=convert_to_obj(mesh);
         if (!no_output){
             if (argc>=3){
                 std::string outPath=argv[outputOffset];
