@@ -227,10 +227,11 @@ std::string convert_to_obj(mesh4& mesh,bool preserve_LOD){
     return objData;
 };
 void print_usage(char** argv){
-    std::cout << "Usage: " << argv[0] << " <filemesh path> <opt: -o output OBJ path> [--no-output]" << std::endl;
+    std::cout << "Usage: " << argv[0] << " <filemesh path> <opt: -o output OBJ path> [--no-output] [--no-preserve-LOD]" << std::endl;
     std::cout << "Options:" << std::endl;
     std::cout << "  -o <output OBJ path>   Specify output path for the OBJ file. If not provided, outputs to stdout." << std::endl;
     std::cout << "  --no-output            Parses the FileMesh file but does not produce any output." << std::endl;
+    std::cout << "  --no-preserve-LOD      Determines if it doesnt preserve Level Of Detail (LOD) of the mesh" << std::endl;
 };
 int main(int argc,char** argv){
     if (argc<2){
