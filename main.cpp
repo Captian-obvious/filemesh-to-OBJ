@@ -181,7 +181,7 @@ std::string convert_to_obj(mesh3& mesh,bool preserve_LOD){
     };
     return objData;
 };
-std::string convert_to_obj(mesh4& mesh,bool preserve_LOD{
+std::string convert_to_obj(mesh4& mesh,bool preserve_LOD){
     std::string objData="# Generated from FileMesh v4.00/v4.01\n";
     for (uint i=0;i<mesh.header.vert_cnt;i++){
         objData+="v "+std::to_string(mesh.verts[i].px)+" "+std::to_string(mesh.verts[i].py)+" "+std::to_string(mesh.verts[i].pz)+" "+std::to_string(mesh.verts[i].r)+" "+std::to_string(mesh.verts[i].g)+" "+std::to_string(mesh.verts[i].b)+"\n# alpha: "+std::to_string(mesh.verts[i].a)+"\n";
