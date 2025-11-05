@@ -5,9 +5,6 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
-#include <type_traits>
-#include <cstdint>
-#include <algorithm>
 /*NOTE:
 All FileMesh versions start with "version (version)\n", INCLUDING binary ones
 */
@@ -141,73 +138,90 @@ std::vector<std::string> split(const std::string &s,const char separator=' '){
     return tokens;
 };
 
-template<typename MeshType>
-struct MeshTraits;
-
-template<>
-struct MeshTraits<mesh2> {
-    static constexpr const char* version = "FileMesh v2.00";
-    static constexpr bool has_lod = false;
-    static uint get_vertex_count(const mesh2& m) { return m.header.vert_cnt; }
-    static uint get_face_count(const mesh2& m) { return m.header.face_cnt; }
-};
-
-template<>
-struct MeshTraits<mesh3> {
-    static constexpr const char* version = "FileMesh v3.00/v3.01";
-    static constexpr bool has_lod = true;
-    static uint get_vertex_count(const mesh3& m) { return m.header.vert_cnt; }
-    static uint get_face_count(const mesh3& m) { return m.header.face_cnt; }
-    static const uint* get_lod_offsets(const mesh3& m) { return m.lod_offsets; }
-    static uint get_lod_offset_count(const mesh3& m) { return m.header.lod_offset_cnt; }
-};
-
-template<typename MeshType>
-std::string convert_to_obj(const MeshType& mesh, bool preserve_LOD = false) {
-    std::string objData = "# Generated from " + std::string(MeshTraits<MeshType>::version) + "\n";
-    for (uint i = 0; i < MeshTraits<MeshType>::get_vertex_count(mesh); ++i) {
-        const auto& v = mesh.verts[i];
-        objData += "v " + std::to_string(v.px) + " " + std::to_string(v.py) + " " + std::to_string(v.pz) + " " +
-                   std::to_string(v.r) + " " + std::to_string(v.g) + " " + std::to_string(v.b) + "\n# alpha: " +
-                   std::to_string(v.a) + "\n";
-        objData += "vn " + std::to_string(v.nx) + " " + std::to_string(v.ny) + " " + std::to_string(v.nz) + "\n";
-        objData += "vt " + std::to_string(v.tu) + " " + std::to_string(v.tv) + "\n";
+std::string convert_to_obj(mesh2& mesh){
+    std::string objData="# Generated from FileMesh v2.00\n";
+    for (uint i=0;i<mesh.header.vert_cnt;i++){
+        objData+="v "+std::to_string(mesh.verts[i].px)+" "+std::to_string(mesh.verts[i].py)+" "+std::to_string(mesh.verts[i].pz)+" "+std::to_string(mesh.verts[i].r)+" "+std::to_string(mesh.verts[i].g)+" "+std::to_string(mesh.verts[i].b)+"\n# alpha: "+std::to_string(mesh.verts[i].a)+"\n";
+        objData+="vn "+std::to_string(mesh.verts[i].nx)+" "+std::to_string(mesh.verts[i].ny)+" "+std::to_string(mesh.verts[i].nz)+"\n";
+        objData+="vt "+std::to_string(mesh.verts[i].tu)+" "+std::to_string(mesh.verts[i].tv)+"\n";
     };
-    if constexpr (MeshTraits<MeshType>::has_lod) {
-        if (preserve_LOD) {
-            for (uint i = 0; i < MeshTraits<MeshType>::get_lod_offset_count(mesh); ++i) {
-                uint start = MeshTraits<MeshType>::get_lod_offsets(mesh)[i];
-                uint end = (i + 1 < MeshTraits<MeshType>::get_lod_offset_count(mesh)) ?
-                           MeshTraits<MeshType>::get_lod_offsets(mesh)[i + 1] :
-                           MeshTraits<MeshType>::get_face_count(mesh);
-                objData += "# LOD Mesh " + std::to_string(i) + " Offset: " + std::to_string(start) + "\n";
-                if (i > 0) objData += "# LOD Mesh " + std::to_string(i) + " faces commented out.\n";
-                for (uint mi = start; mi < end; ++mi) {
-                    if (i > 0) objData += "# ";
-                    const auto& f = mesh.faces[mi];
-                    objData += "f " + std::to_string(f.a + 1) + "/" + std::to_string(f.a + 1) + "/" + std::to_string(f.a + 1) + " " +
-                               std::to_string(f.b + 1) + "/" + std::to_string(f.b + 1) + "/" + std::to_string(f.b + 1) + " " +
-                               std::to_string(f.c + 1) + "/" + std::to_string(f.c + 1) + "/" + std::to_string(f.c + 1) + "\n";
-                }
-            }
-        } else {
-            uint start = MeshTraits<MeshType>::get_lod_offsets(mesh)[0];
-            uint end = (1 < MeshTraits<MeshType>::get_lod_offset_count(mesh)) ?
-                       MeshTraits<MeshType>::get_lod_offsets(mesh)[1] :
-                       MeshTraits<MeshType>::get_face_count(mesh);
-            for (uint mi = start; mi < end; ++mi) {
-                const auto& f = mesh.faces[mi];
-                objData += "f " + std::to_string(f.a + 1) + "/" + std::to_string(f.a + 1) + "/" + std::to_string(f.a + 1) + " " +
-                           std::to_string(f.b + 1) + "/" + std::to_string(f.b + 1) + "/" + std::to_string(f.b + 1) + " " +
-                           std::to_string(f.c + 1) + "/" + std::to_string(f.c + 1) + "/" + std::to_string(f.c + 1) + "\n";
-            }
-        }
-    } else {
-        for (uint i = 0; i < MeshTraits<MeshType>::get_face_count(mesh); ++i) {
-            const auto& f = mesh.faces[i];
-            objData += "f " + std::to_string(f.a + 1) + "/" + std::to_string(f.a + 1) + "/" + std::to_string(f.a + 1) + " " +
-                       std::to_string(f.b + 1) + "/" + std::to_string(f.b + 1) + "/" + std::to_string(f.b + 1) + " " +
-                       std::to_string(f.c + 1) + "/" + std::to_string(f.c + 1) + "/" + std::to_string(f.c + 1) + "\n";
+    for (uint i=0;i<mesh.header.face_cnt;i++){
+        objData+="f "+std::to_string(mesh.faces[i].a+1)+"/"+std::to_string(mesh.faces[i].a+1)+"/"+std::to_string(mesh.faces[i].a+1)+" "+
+                          std::to_string(mesh.faces[i].b+1)+"/"+std::to_string(mesh.faces[i].b+1)+"/"+std::to_string(mesh.faces[i].b+1)+" "+
+                          std::to_string(mesh.faces[i].c+1)+"/"+std::to_string(mesh.faces[i].c+1)+"/"+std::to_string(mesh.faces[i].c+1)+"\n";
+    };
+    return objData;
+};
+std::string convert_to_obj(mesh3& mesh,bool preserve_LOD){
+    std::string objData="# Generated from FileMesh v3.00/v3.01\n";
+    for (uint i=0;i<mesh.header.vert_cnt;i++){
+        objData+="v "+std::to_string(mesh.verts[i].px)+" "+std::to_string(mesh.verts[i].py)+" "+std::to_string(mesh.verts[i].pz)+" "+std::to_string(mesh.verts[i].r)+" "+std::to_string(mesh.verts[i].g)+" "+std::to_string(mesh.verts[i].b)+"\n# alpha: "+std::to_string(mesh.verts[i].a)+"\n";
+        objData+="vn "+std::to_string(mesh.verts[i].nx)+" "+std::to_string(mesh.verts[i].ny)+" "+std::to_string(mesh.verts[i].nz)+""+"\n";
+        objData+="vt "+std::to_string(mesh.verts[i].tu)+" "+std::to_string(mesh.verts[i].tv)+"\n";
+    };
+    if (preserve_LOD){
+        int meshesWritten=0;
+        for (uint i=0;i<mesh.header.lod_offset_cnt;i++){
+            objData+="# LOD Mesh "+std::to_string(i)+" Offset: "+std::to_string(mesh.lod_offsets[i])+"\n";
+            meshesWritten++;
+            uint startOffset=mesh.lod_offsets[i];
+            uint endOffset=(i+1<mesh.header.lod_offset_cnt) ? mesh.lod_offsets[i+1] : mesh.header.face_cnt;
+            if (i>0){
+                objData+="# LOD Mesh "+std::to_string(i)+" faces commented out.\n";
+            };
+            for (uint mi=startOffset;mi<endOffset;mi++){
+                if (i>0){
+                    objData+="# ";
+                };
+                objData+="f "+std::to_string(mesh.faces[mi].a+1)+"/"+std::to_string(mesh.faces[mi].a+1)+"/"+std::to_string(mesh.faces[mi].a+1)+" "+
+                                std::to_string(mesh.faces[mi].b+1)+"/"+std::to_string(mesh.faces[mi].b+1)+"/"+std::to_string(mesh.faces[mi].b+1)+" "+
+                                std::to_string(mesh.faces[mi].c+1)+"/"+std::to_string(mesh.faces[mi].c+1)+"/"+std::to_string(mesh.faces[mi].c+1)+"\n";
+            };
+        };
+    }else{
+        uint startOffset=mesh.lod_offsets[0];
+        uint endOffset=(1<mesh.header.lod_offset_cnt) ? mesh.lod_offsets[1] : mesh.header.face_cnt;
+        for (uint mi=startOffset;mi<endOffset;mi++){
+            objData+="f "+std::to_string(mesh.faces[mi].a+1)+"/"+std::to_string(mesh.faces[mi].a+1)+"/"+std::to_string(mesh.faces[mi].a+1)+" "+
+                                std::to_string(mesh.faces[mi].b+1)+"/"+std::to_string(mesh.faces[mi].b+1)+"/"+std::to_string(mesh.faces[mi].b+1)+" "+
+                                std::to_string(mesh.faces[mi].c+1)+"/"+std::to_string(mesh.faces[mi].c+1)+"/"+std::to_string(mesh.faces[mi].c+1)+"\n";
+        };
+    };
+    return objData;
+};
+std::string convert_to_obj(mesh4& mesh,bool preserve_LOD){
+    std::string objData="# Generated from FileMesh v4.00/v4.01\n";
+    for (uint i=0;i<mesh.header.vert_cnt;i++){
+        objData+="v "+std::to_string(mesh.verts[i].px)+" "+std::to_string(mesh.verts[i].py)+" "+std::to_string(mesh.verts[i].pz)+" "+std::to_string(mesh.verts[i].r)+" "+std::to_string(mesh.verts[i].g)+" "+std::to_string(mesh.verts[i].b)+"\n# alpha: "+std::to_string(mesh.verts[i].a)+"\n";
+        objData+="vn "+std::to_string(mesh.verts[i].nx)+" "+std::to_string(mesh.verts[i].ny)+" "+std::to_string(mesh.verts[i].nz)+""+"\n";
+        objData+="vt "+std::to_string(mesh.verts[i].tu)+" "+std::to_string(mesh.verts[i].tv)+"\n";
+    };
+    if (preserve_LOD){
+        int meshesWritten=0;
+        for (uint i=0;i<mesh.header.lod_offset_cnt;i++){
+            objData+="# LOD Mesh "+std::to_string(i)+" Offset: "+std::to_string(mesh.lod_offsets[i])+"\n";
+            meshesWritten++;
+            uint startOffset=mesh.lod_offsets[i];
+            uint endOffset=(i+1<mesh.header.lod_offset_cnt) ? mesh.lod_offsets[i+1] : mesh.header.face_cnt;
+            if (i>0){
+                objData+="# LOD Mesh "+std::to_string(i)+" faces commented out.\n";
+            };
+            for (uint mi=startOffset;mi<endOffset;mi++){
+                if (i>0){
+                    objData+="# ";
+                };
+                objData+="f "+std::to_string(mesh.faces[mi].a+1)+"/"+std::to_string(mesh.faces[mi].a+1)+"/"+std::to_string(mesh.faces[mi].a+1)+" "+
+                                std::to_string(mesh.faces[mi].b+1)+"/"+std::to_string(mesh.faces[mi].b+1)+"/"+std::to_string(mesh.faces[mi].b+1)+" "+
+                                std::to_string(mesh.faces[mi].c+1)+"/"+std::to_string(mesh.faces[mi].c+1)+"/"+std::to_string(mesh.faces[mi].c+1)+"\n";
+            };
+        };
+    }else{
+        uint startOffset=mesh.lod_offsets[0];
+        uint endOffset=(1<mesh.header.lod_offset_cnt) ? mesh.lod_offsets[1] : mesh.header.face_cnt;
+        for (uint mi=startOffset;mi<endOffset;mi++){
+            objData+="f "+std::to_string(mesh.faces[mi].a+1)+"/"+std::to_string(mesh.faces[mi].a+1)+"/"+std::to_string(mesh.faces[mi].a+1)+" "+
+                            std::to_string(mesh.faces[mi].b+1)+"/"+std::to_string(mesh.faces[mi].b+1)+"/"+std::to_string(mesh.faces[mi].b+1)+" "+
+                            std::to_string(mesh.faces[mi].c+1)+"/"+std::to_string(mesh.faces[mi].c+1)+"/"+std::to_string(mesh.faces[mi].c+1)+"\n";
         };
     };
     return objData;
