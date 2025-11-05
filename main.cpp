@@ -179,6 +179,33 @@ std::string convert_to_obj(mesh3& mesh){
     };
     return objData;
 };
+std::string convert_to_obj(mesh4& mesh){
+    std::string objData="# Generated from FileMesh v4.00/v4.01\n";
+    for (uint i=0;i<mesh.header.vert_cnt;i++){
+        objData+="v "+std::to_string(mesh.verts[i].px)+" "+std::to_string(mesh.verts[i].py)+" "+std::to_string(mesh.verts[i].pz)+" "+std::to_string(mesh.verts[i].r)+" "+std::to_string(mesh.verts[i].g)+" "+std::to_string(mesh.verts[i].b)+"\n# alpha: "+std::to_string(mesh.verts[i].a)+"\n";
+        objData+="vn "+std::to_string(mesh.verts[i].nx)+" "+std::to_string(mesh.verts[i].ny)+" "+std::to_string(mesh.verts[i].nz)+""+"\n";
+        objData+="vt "+std::to_string(mesh.verts[i].tu)+" "+std::to_string(mesh.verts[i].tv)+"\n";
+    };
+    int meshesWritten=0;
+    for (uint i=0;i<mesh.header.lod_offset_cnt;i++){
+        objData+="# LOD Mesh "+std::to_string(i)+" Offset: "+std::to_string(mesh.lod_offsets[i])+"\n";
+        meshesWritten++;
+        uint startOffset=mesh.lod_offsets[i];
+        uint endOffset=(i+1<mesh.header.lod_offset_cnt) ? mesh.lod_offsets[i+1] : mesh.header.face_cnt;
+        if (i>0){
+            objData+="# LOD Mesh "+std::to_string(i)+" faces commented out.\n";
+        };
+        for (uint mi=startOffset;mi<endOffset;mi++){
+            if (i>0){
+                objData+="# ";
+            };
+            objData+="f "+std::to_string(mesh.faces[mi].a+1)+"/"+std::to_string(mesh.faces[mi].a+1)+"/"+std::to_string(mesh.faces[mi].a+1)+" "+
+                            std::to_string(mesh.faces[mi].b+1)+"/"+std::to_string(mesh.faces[mi].b+1)+"/"+std::to_string(mesh.faces[mi].b+1)+" "+
+                            std::to_string(mesh.faces[mi].c+1)+"/"+std::to_string(mesh.faces[mi].c+1)+"/"+std::to_string(mesh.faces[mi].c+1)+"\n";
+        };
+    };
+    return objData;
+};
 void print_usage(char** argv){
     std::cout << "Usage: " << argv[0] << " <filemesh path> <opt: -o output OBJ path> [--no-output]" << std::endl;
     std::cout << "Options:" << std::endl;
@@ -386,6 +413,21 @@ int main(int argc,char** argv){
         readBytes=fread(mesh.bone_names,mesh.header.sizeof_bone_names,1,fd);
         mesh.subsets=new meshSubset[mesh.header.subset_cnt];
         readBytes=fread(mesh.subsets,sizeof(meshSubset),mesh.header.subset_cnt,fd);
+        if (!no_output){
+            if (argc>=3){
+                std::string outPath=argv[outputOffset];
+                FILE* outFd=fopen(outPath.c_str(),"w");
+                if (!outFd){
+                    print_err("Failed to open output file "+outPath);
+                }else{
+                    fwrite(objData.c_str(),1,objData.size(),outFd);
+                    fclose(outFd);
+                    print_info("OBJ file written to "+outPath);
+                };
+            }else{
+                std::cout << objData << std::endl;
+            };
+        };
         delete[] mesh.verts;
         delete[] mesh.faces;
         delete[] mesh.lod_offsets;
