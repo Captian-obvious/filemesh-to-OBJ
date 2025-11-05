@@ -141,7 +141,7 @@ std::vector<std::string> split(const std::string &s,const char separator=' '){
 std::string convert_to_obj(mesh2& mesh){
     std::string objData="# Generated from FileMesh v2.00\n";
     for (uint i=0;i<mesh.header.vert_cnt;i++){
-        objData+="v "+std::to_string(mesh.verts[i].px)+" "+std::to_string(mesh.verts[i].py)+" "+std::to_string(mesh.verts[i].pz)+"\n";
+        objData+="v "+std::to_string(mesh.verts[i].px)+" "+std::to_string(mesh.verts[i].py)+" "+std::to_string(mesh.verts[i].pz)+" "+std::to_string(mesh.verts[i].r)+" "+std::to_string(mesh.verts[i].g)+" "+std::to_string(mesh.verts[i].b)+"\n# alpha: "+std::to_string(mesh.verts[i].a)+"\n";
         objData+="vn "+std::to_string(mesh.verts[i].nx)+" "+std::to_string(mesh.verts[i].ny)+" "+std::to_string(mesh.verts[i].nz)+"\n";
         objData+="vt "+std::to_string(mesh.verts[i].tu)+" "+std::to_string(mesh.verts[i].tv)+"\n";
     };
@@ -155,8 +155,8 @@ std::string convert_to_obj(mesh2& mesh){
 std::string convert_to_obj(mesh3& mesh){
     std::string objData="# Generated from FileMesh v3.00/v3.01\n";
     for (uint i=0;i<mesh.header.vert_cnt;i++){
-        objData+="v "+std::to_string(mesh.verts[i].px)+" "+std::to_string(mesh.verts[i].py)+" "+std::to_string(mesh.verts[i].pz)+"\n";
-        objData+="vn "+std::to_string(mesh.verts[i].nx)+" "+std::to_string(mesh.verts[i].ny)+" "+std::to_string(mesh.verts[i].nz)+"\n";
+        objData+="v "+std::to_string(mesh.verts[i].px)+" "+std::to_string(mesh.verts[i].py)+" "+std::to_string(mesh.verts[i].pz)+" "+std::to_string(mesh.verts[i].r)+" "+std::to_string(mesh.verts[i].g)+" "+std::to_string(mesh.verts[i].b)+"\n# alpha: "+std::to_string(mesh.verts[i].a)+"\n";
+        objData+="vn "+std::to_string(mesh.verts[i].nx)+" "+std::to_string(mesh.verts[i].ny)+" "+std::to_string(mesh.verts[i].nz)+""+"\n";
         objData+="vt "+std::to_string(mesh.verts[i].tu)+" "+std::to_string(mesh.verts[i].tv)+"\n";
     };
     int meshesWritten=0;
@@ -359,7 +359,12 @@ int main(int argc,char** argv){
         delete[] mesh.lod_offsets;
         fclose(fd);
     }else if(version=="4.00" or version=="4.01"){
-        print_info("yes");
+        mesh4 mesh;
+        size_t readBytes=fread(&mesh.header,sizeof(mesh4Head),1,fd);
+        readBytes=fread(mesh.verts,sizeof(meshVertex),mesh.header.vert_cnt,fd);
+        if (mesh.header.bone_cnt>0){
+
+        }
     };
     return 0;
 };
