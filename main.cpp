@@ -152,7 +152,7 @@ std::string convert_to_obj(mesh2& mesh){
     };
     return objData;
 };
-std::string convert_to_obj(mesh3& mesh){
+std::string convert_to_obj(mesh3& mesh,bool preserve_LOD){
     std::string objData="# Generated from FileMesh v3.00/v3.01\n";
     for (uint i=0;i<mesh.header.vert_cnt;i++){
         objData+="v "+std::to_string(mesh.verts[i].px)+" "+std::to_string(mesh.verts[i].py)+" "+std::to_string(mesh.verts[i].pz)+" "+std::to_string(mesh.verts[i].r)+" "+std::to_string(mesh.verts[i].g)+" "+std::to_string(mesh.verts[i].b)+"\n# alpha: "+std::to_string(mesh.verts[i].a)+"\n";
@@ -165,12 +165,14 @@ std::string convert_to_obj(mesh3& mesh){
         meshesWritten++;
         uint startOffset=mesh.lod_offsets[i];
         uint endOffset=(i+1<mesh.header.lod_offset_cnt) ? mesh.lod_offsets[i+1] : mesh.header.face_cnt;
-        if (i>0){
+        if (i>0 && preserve_LOD){
             objData+="# LOD Mesh "+std::to_string(i)+" faces commented out.\n";
         };
         for (uint mi=startOffset;mi<endOffset;mi++){
-            if (i>0){
+            if (i>0 && preserve_LOD){
                 objData+="# ";
+            }else{
+                break;
             };
             objData+="f "+std::to_string(mesh.faces[mi].a+1)+"/"+std::to_string(mesh.faces[mi].a+1)+"/"+std::to_string(mesh.faces[mi].a+1)+" "+
                             std::to_string(mesh.faces[mi].b+1)+"/"+std::to_string(mesh.faces[mi].b+1)+"/"+std::to_string(mesh.faces[mi].b+1)+" "+
@@ -179,7 +181,7 @@ std::string convert_to_obj(mesh3& mesh){
     };
     return objData;
 };
-std::string convert_to_obj(mesh4& mesh){
+std::string convert_to_obj(mesh4& mesh,bool preserve_LOD{
     std::string objData="# Generated from FileMesh v4.00/v4.01\n";
     for (uint i=0;i<mesh.header.vert_cnt;i++){
         objData+="v "+std::to_string(mesh.verts[i].px)+" "+std::to_string(mesh.verts[i].py)+" "+std::to_string(mesh.verts[i].pz)+" "+std::to_string(mesh.verts[i].r)+" "+std::to_string(mesh.verts[i].g)+" "+std::to_string(mesh.verts[i].b)+"\n# alpha: "+std::to_string(mesh.verts[i].a)+"\n";
@@ -192,12 +194,14 @@ std::string convert_to_obj(mesh4& mesh){
         meshesWritten++;
         uint startOffset=mesh.lod_offsets[i];
         uint endOffset=(i+1<mesh.header.lod_offset_cnt) ? mesh.lod_offsets[i+1] : mesh.header.face_cnt;
-        if (i>0){
+        if (i>0 && preserve_LOD){
             objData+="# LOD Mesh "+std::to_string(i)+" faces commented out.\n";
         };
         for (uint mi=startOffset;mi<endOffset;mi++){
-            if (i>0){
+            if (i>0 && preserve_LOD){
                 objData+="# ";
+            }else{
+                break;
             };
             objData+="f "+std::to_string(mesh.faces[mi].a+1)+"/"+std::to_string(mesh.faces[mi].a+1)+"/"+std::to_string(mesh.faces[mi].a+1)+" "+
                             std::to_string(mesh.faces[mi].b+1)+"/"+std::to_string(mesh.faces[mi].b+1)+"/"+std::to_string(mesh.faces[mi].b+1)+" "+
@@ -219,6 +223,7 @@ int main(int argc,char** argv){
     };
     std::string path = argv[1];
     bool no_output=false;
+    bool preserve_LOD=true;
     int outputOffset=0;
     for (uint i=0;i<argc;i++){
         if (argv[i]==std::string("--no-output")){
@@ -227,6 +232,8 @@ int main(int argc,char** argv){
         }else if(argv[i]==std::string("-h") or argv[i]==std::string("--help")){
             print_usage(argv);
             return 0;
+        }else if(argv[i]==std::string("--no-preserve-LOD"){
+            preserve_LOD=false;
         }else if(argv[i]==std::string("-o")){
             outputOffset=i+1;
             i++; //skip next arg as its the output path
@@ -365,7 +372,7 @@ int main(int argc,char** argv){
             print_err("Failed to read LOD offsets.");
             return 1;
         };
-        std::string objData=convert_to_obj(mesh);
+        std::string objData=convert_to_obj(mesh,preserve_LOD);
         if (!no_output){
             if (argc>=3){
                 std::string outPath=argv[outputOffset];
@@ -413,7 +420,7 @@ int main(int argc,char** argv){
         readBytes=fread(mesh.bone_names,mesh.header.sizeof_bone_names,1,fd);
         mesh.subsets=new meshSubset[mesh.header.subset_cnt];
         readBytes=fread(mesh.subsets,sizeof(meshSubset),mesh.header.subset_cnt,fd);
-        std::string objData=convert_to_obj(mesh);
+        std::string objData=convert_to_obj(mesh,preserve_LOD);
         if (!no_output){
             if (argc>=3){
                 std::string outPath=argv[outputOffset];

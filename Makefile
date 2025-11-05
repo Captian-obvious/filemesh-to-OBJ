@@ -17,10 +17,10 @@ distcheck:
 	./fmtoobj ./test/testv4.mesh --no-output
 	./fmtoobj ./test/testv5.mesh --no-output
 	echo "Testing conversion..."
-	./fmtoobj ./test/testv2.mesh -o ./test/testv2.obj
-	./fmtoobj ./test/testv3.mesh -o ./test/testv3.obj
-	./fmtoobj ./test/testv4.mesh -o ./test/testv4.obj
-	./fmtoobj ./test/testv5.mesh -o ./test/testv5.obj
+	./fmtoobj ./test/testv2.mesh -o ./test/testv2.obj --no-preserve-LOD
+	./fmtoobj ./test/testv3.mesh -o ./test/testv3.obj --no-preserve-LOD
+	./fmtoobj ./test/testv4.mesh -o ./test/testv4.obj --no-preserve-LOD
+	./fmtoobj ./test/testv5.mesh -o ./test/testv5.obj --no-preserve-LOD
 	ls ./test | grep .obj
 	echo "All tests passed."
 	echo "Moving to BUILD directory..."
