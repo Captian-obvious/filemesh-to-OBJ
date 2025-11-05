@@ -167,12 +167,11 @@ std::string convert_to_obj(mesh3& mesh,bool preserve_LOD){
         uint endOffset=(i+1<mesh.header.lod_offset_cnt) ? mesh.lod_offsets[i+1] : mesh.header.face_cnt;
         if (i>0 && preserve_LOD){
             objData+="# LOD Mesh "+std::to_string(i)+" faces commented out.\n";
+            break;
         };
         for (uint mi=startOffset;mi<endOffset;mi++){
-            if (i>0 && preserve_LOD){
+            if (i>0){
                 objData+="# ";
-            }else{
-                break;
             };
             objData+="f "+std::to_string(mesh.faces[mi].a+1)+"/"+std::to_string(mesh.faces[mi].a+1)+"/"+std::to_string(mesh.faces[mi].a+1)+" "+
                             std::to_string(mesh.faces[mi].b+1)+"/"+std::to_string(mesh.faces[mi].b+1)+"/"+std::to_string(mesh.faces[mi].b+1)+" "+
@@ -196,12 +195,11 @@ std::string convert_to_obj(mesh4& mesh,bool preserve_LOD){
         uint endOffset=(i+1<mesh.header.lod_offset_cnt) ? mesh.lod_offsets[i+1] : mesh.header.face_cnt;
         if (i>0 && preserve_LOD){
             objData+="# LOD Mesh "+std::to_string(i)+" faces commented out.\n";
+            break;
         };
         for (uint mi=startOffset;mi<endOffset;mi++){
-            if (i>0 && preserve_LOD){
+            if (i>0){
                 objData+="# ";
-            }else{
-                break;
             };
             objData+="f "+std::to_string(mesh.faces[mi].a+1)+"/"+std::to_string(mesh.faces[mi].a+1)+"/"+std::to_string(mesh.faces[mi].a+1)+" "+
                             std::to_string(mesh.faces[mi].b+1)+"/"+std::to_string(mesh.faces[mi].b+1)+"/"+std::to_string(mesh.faces[mi].b+1)+" "+
