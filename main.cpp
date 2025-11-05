@@ -376,9 +376,16 @@ int main(int argc,char** argv){
             print_err("Failed to read LOD offsets.");
             return 1;
         };
+        mesh.bones=new meshBone[mesh.header.bone_cnt];
+        readBytes=fread(mesh.bones,sizeof(meshBone),mesh.header.bone_cnt,fd);
+        if (readBytes!=mesh.header.bone_cnt) {
+            print_err("Failed to read bones.");
+            return 1;
+        };
         delete[] mesh.verts;
         delete[] mesh.faces;
         delete[] mesh.lod_offsets;
+        delete[] mesh.bones;
         fclose(fd);
     };
     return 0;
