@@ -367,6 +367,9 @@ int main(int argc,char** argv){
             mesh.skinning=new meshSkinning[mesh.header.vert_cnt];
             readBytes=fread(mesh.skinning,sizeof(meshSkinning),mesh.header.vert_cnt,fd);
         };
+        mesh.faces=new meshFace[mesh.header.face_cnt];
+        print_info("Polygon Count (triangles): "+std::to_string(mesh.header.face_cnt));
+        readBytes=fread(mesh.faces,sizeof(meshFace),mesh.header.face_cnt,fd);
     };
     return 0;
 };
