@@ -232,7 +232,7 @@ int main(int argc,char** argv){
         }else if(argv[i]==std::string("-h") or argv[i]==std::string("--help")){
             print_usage(argv);
             return 0;
-        }else if(argv[i]==std::string("--no-preserve-LOD"){
+        }else if(argv[i]==std::string("--no-preserve-LOD")){
             preserve_LOD=false;
         }else if(argv[i]==std::string("-o")){
             outputOffset=i+1;
