@@ -371,7 +371,7 @@ int main(int argc,char** argv){
         print_info("Polygon Count (triangles): "+std::to_string(mesh.header.face_cnt));
         readBytes=fread(mesh.faces,sizeof(meshFace),mesh.header.face_cnt,fd);
         mesh.lod_offsets = new uint[mesh.header.lod_offset_cnt];
-        readBytes=fread(mesh.lod_offsets,mesh.header.sizeof_lod_offset,mesh.header.lod_offset_cnt,fd);
+        readBytes=fread(mesh.lod_offsets,4,mesh.header.lod_offset_cnt,fd);
         if (readBytes!=mesh.header.lod_offset_cnt) {
             print_err("Failed to read LOD offsets.");
             return 1;
