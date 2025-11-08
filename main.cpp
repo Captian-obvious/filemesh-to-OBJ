@@ -43,6 +43,20 @@ typedef struct {
     byte hq_lod_cnt;
     byte unused;
 } mesh4Head;
+typedef struct {
+    unsigned short sizeof_mesh4Head;
+    unsigned short lod_type;
+    uint vert_cnt;
+    uint face_cnt;
+    unsigned short lod_offset_cnt;
+    unsigned short bone_cnt;
+    uint sizeof_bone_names;
+    unsigned short subset_cnt;
+    byte hq_lod_cnt;
+    byte unused;
+    uint facs_dat_form;
+    uint facs_dat_size;
+} mesh5Head;
 
 enum meshLodType {
     None = 0,
@@ -70,6 +84,27 @@ typedef struct {
     byte subset_indexes;
     byte bone_weights;
 } meshSkinning;
+
+/*
+typedef struct {
+	QuantizedMatrix px;
+	QuantizedMatrix py;
+	QuantizedMatrix pz;
+	QuantizedMatrix rx;
+	QuantizedMatrix ry;
+	QuantizedMatrix rz;
+} QuantizedTransforms;
+ */
+typedef struct {	
+    uint sizeof_face_bone_names_blob;
+    uint sizeof_face_ctrl_names_blob;
+    unsigned long sizeof_quant_tf;
+    uint sizeof_two_pose_correctives;
+    uint sizeof_three_pose_correctives;
+    byte* face_bone_names_blob;
+    byte* face_ctrl_names_blob;
+
+} meshFacsData;
 
 typedef struct {
     uint bone_name_ind;
@@ -120,6 +155,17 @@ typedef struct {
     byte* bone_names;
     meshSubset* subsets;
 } mesh4;
+typedef struct {
+    mesh4Head header;
+    meshVertex* verts;
+    meshSkinning* skinning;
+    meshFace* faces;
+    uint* lod_offsets;
+    meshBone* bones;
+    byte* bone_names;
+    meshSubset* subsets;
+
+} mesh5;
 
 void print_info(std::string msg){
     std::cout << msg << std::endl;
