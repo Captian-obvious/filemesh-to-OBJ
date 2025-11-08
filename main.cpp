@@ -601,7 +601,7 @@ int main(int argc,char** argv){
         };
         mesh.lod_offsets = new uint[mesh.header.lod_offset_cnt];
         readBytes=fread(mesh.lod_offsets,4,mesh.header.lod_offset_cnt,fd);
-        for (uint i=0;i<mesh.lod_offsets;i++){
+        for (uint i=0;i<mesh.header.lod_offset_cnt;i++){
             print_info("Detected LOD offset: "+std::to_string(mesh.lod_offsets[i]));
         };
         if (readBytes!=mesh.header.lod_offset_cnt) {
