@@ -522,7 +522,6 @@ int main(int argc,char** argv){
         mesh.subsets=new meshSubset[mesh.header.subset_cnt];
         readBytes=fread(mesh.subsets,sizeof(meshSubset),mesh.header.subset_cnt,fd);
         std::string objData=convert_to_obj(mesh,preserve_LOD);
-        print_info("we got here");
         if (!no_output){
             if (argc>=3){
                 std::string outPath=argv[outputOffset];
@@ -569,12 +568,12 @@ int main(int argc,char** argv){
             print_err("Failed to read bones.");
             return 1;
         };
-        print_info("we got here");
         mesh.bone_names=new byte[mesh.header.sizeof_bone_names];
         readBytes=fread(mesh.bone_names,mesh.header.sizeof_bone_names,1,fd);
         mesh.subsets=new meshSubset[mesh.header.subset_cnt];
         readBytes=fread(mesh.subsets,sizeof(meshSubset),mesh.header.subset_cnt,fd);
         std::string objData=convert_to_obj(mesh,preserve_LOD);
+        print_info("we got here");
         if (!no_output){
             if (argc>=3){
                 std::string outPath=argv[outputOffset];
