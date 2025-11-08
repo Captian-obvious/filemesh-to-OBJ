@@ -500,6 +500,10 @@ int main(int argc,char** argv){
         size_t readBytes=fread(&mesh.header,sizeof(mesh4Head),1,fd);
         mesh.verts=new meshVertex[mesh.header.vert_cnt];
         readBytes=fread(mesh.verts,sizeof(meshVertex),mesh.header.vert_cnt,fd);
+        if (readBytes!=mesh.header.vert_cnt) {
+            print_err("Failed to read vertexes.");
+            return 1;
+        };
         if (mesh.header.bone_cnt>0){
             mesh.skinning=new meshSkinning[mesh.header.vert_cnt];
             readBytes=fread(mesh.skinning,sizeof(meshSkinning),mesh.header.vert_cnt,fd);
@@ -507,6 +511,10 @@ int main(int argc,char** argv){
         mesh.faces=new meshFace[mesh.header.face_cnt];
         print_info("Polygon Count (triangles): "+std::to_string(mesh.header.face_cnt));
         readBytes=fread(mesh.faces,sizeof(meshFace),mesh.header.face_cnt,fd);
+        if (readBytes!=mesh.header.face_cnt) {
+            print_err("Failed to read faces.");
+            return 1;
+        };
         mesh.lod_offsets = new uint[mesh.header.lod_offset_cnt];
         readBytes=fread(mesh.lod_offsets,4,mesh.header.lod_offset_cnt,fd);
         if (readBytes!=mesh.header.lod_offset_cnt) {
@@ -521,8 +529,16 @@ int main(int argc,char** argv){
         };
         mesh.bone_names=new byte[mesh.header.sizeof_bone_names];
         readBytes=fread(mesh.bone_names,mesh.header.sizeof_bone_names,1,fd);
+        if (readBytes!=mesh.header.sizeof_bone_names) {
+            print_err("Failed to read bone metadata.");
+            return 1;
+        };
         mesh.subsets=new meshSubset[mesh.header.subset_cnt];
         readBytes=fread(mesh.subsets,sizeof(meshSubset),mesh.header.subset_cnt,fd);
+        if (readBytes!=mesh.header.subset_cnt) {
+            print_err("Failed to read subsets.");
+            return 1;
+        };
         std::string objData=convert_to_obj(mesh,preserve_LOD);
         if (!no_output){
             if (argc>=3){
@@ -551,6 +567,10 @@ int main(int argc,char** argv){
         size_t readBytes=fread(&mesh.header,sizeof(mesh5Head),1,fd);
         mesh.verts=new meshVertex[mesh.header.vert_cnt];
         readBytes=fread(mesh.verts,sizeof(meshVertex),mesh.header.vert_cnt,fd);
+        if (readBytes!=mesh.header.vert_cnt) {
+            print_err("Failed to read vertexes.");
+            return 1;
+        };
         if (mesh.header.bone_cnt>0){
             mesh.skinning=new meshSkinning[mesh.header.vert_cnt];
             readBytes=fread(mesh.skinning,sizeof(meshSkinning),mesh.header.vert_cnt,fd);
@@ -558,6 +578,10 @@ int main(int argc,char** argv){
         mesh.faces=new meshFace[mesh.header.face_cnt];
         print_info("Polygon Count (triangles): "+std::to_string(mesh.header.face_cnt));
         readBytes=fread(mesh.faces,sizeof(meshFace),mesh.header.face_cnt,fd);
+        if (readBytes!=mesh.header.face_cnt) {
+            print_err("Failed to read faces.");
+            return 1;
+        };
         mesh.lod_offsets = new uint[mesh.header.lod_offset_cnt];
         readBytes=fread(mesh.lod_offsets,4,mesh.header.lod_offset_cnt,fd);
         if (readBytes!=mesh.header.lod_offset_cnt) {
@@ -572,8 +596,16 @@ int main(int argc,char** argv){
         };
         mesh.bone_names=new byte[mesh.header.sizeof_bone_names];
         readBytes=fread(mesh.bone_names,mesh.header.sizeof_bone_names,1,fd);
+        if (readBytes!=mesh.header.sizeof_bone_names) {
+            print_err("Failed to read bone metadata.");
+            return 1;
+        };
         mesh.subsets=new meshSubset[mesh.header.subset_cnt];
         readBytes=fread(mesh.subsets,sizeof(meshSubset),mesh.header.subset_cnt,fd);
+        if (readBytes!=mesh.header.subset_cnt) {
+            print_err("Failed to read subsets.");
+            return 1;
+        };
         std::string objData=convert_to_obj(mesh,preserve_LOD);
         if (!no_output){
             if (argc>=3){
