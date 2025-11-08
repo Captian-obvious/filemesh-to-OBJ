@@ -546,7 +546,7 @@ int main(int argc,char** argv){
         fclose(fd);
     }else if(version=="5.00"){
         mesh5 mesh;
-        size_t readBytes=fread(&mesh.header,sizeof(mesh4Head),1,fd);
+        size_t readBytes=fread(&mesh.header,sizeof(mesh5Head),1,fd);
         mesh.verts=new meshVertex[mesh.header.vert_cnt];
         readBytes=fread(mesh.verts,sizeof(meshVertex),mesh.header.vert_cnt,fd);
         if (mesh.header.bone_cnt>0){
