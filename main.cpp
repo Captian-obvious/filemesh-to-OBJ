@@ -276,12 +276,12 @@ std::string convert_to_obj(mesh4& mesh,bool preserve_LOD){
 
 std::string convert_to_obj(mesh5& mesh,bool preserve_LOD){
     std::string objData="# Generated from FileMesh v5.00\n";
-    std::cout << "Reading vertextes: " << mesh.header.vert_cnt << std::endl;
     for (uint i=0;i<mesh.header.vert_cnt;i++){
         objData+="v "+std::to_string(mesh.verts[i].px)+" "+std::to_string(mesh.verts[i].py)+" "+std::to_string(mesh.verts[i].pz)+" "+std::to_string(mesh.verts[i].r)+" "+std::to_string(mesh.verts[i].g)+" "+std::to_string(mesh.verts[i].b)+"\n# alpha: "+std::to_string(mesh.verts[i].a)+"\n";
         objData+="vn "+std::to_string(mesh.verts[i].nx)+" "+std::to_string(mesh.verts[i].ny)+" "+std::to_string(mesh.verts[i].nz)+""+"\n";
         objData+="vt "+std::to_string(mesh.verts[i].tu)+" "+std::to_string(mesh.verts[i].tv)+"\n";
     };
+    std::cout << "Reading vertextes: " << mesh.header.vert_cnt << std::endl;
     if (preserve_LOD){
         int meshesWritten=0;
         for (uint i=0;i<mesh.header.lod_offset_cnt;i++){
