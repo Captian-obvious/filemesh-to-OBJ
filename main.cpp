@@ -274,7 +274,7 @@ std::string convert_to_obj(mesh4& mesh,bool preserve_LOD){
     return objData;
 };
 std::string convert_to_obj(mesh5& mesh,bool preserve_LOD){
-    std::string objData="# Generated from FileMesh v4.00/v4.01\n";
+    std::string objData="# Generated from FileMesh v5.00/v5.01\n";
     for (uint i=0;i<mesh.header.vert_cnt;i++){
         objData+="v "+std::to_string(mesh.verts[i].px)+" "+std::to_string(mesh.verts[i].py)+" "+std::to_string(mesh.verts[i].pz)+" "+std::to_string(mesh.verts[i].r)+" "+std::to_string(mesh.verts[i].g)+" "+std::to_string(mesh.verts[i].b)+"\n# alpha: "+std::to_string(mesh.verts[i].a)+"\n";
         objData+="vn "+std::to_string(mesh.verts[i].nx)+" "+std::to_string(mesh.verts[i].ny)+" "+std::to_string(mesh.verts[i].nz)+""+"\n";
@@ -556,6 +556,10 @@ int main(int argc,char** argv){
         mesh.faces=new meshFace[mesh.header.face_cnt];
         print_info("Polygon Count (triangles): "+std::to_string(mesh.header.face_cnt));
         readBytes=fread(mesh.faces,sizeof(meshFace),mesh.header.face_cnt,fd);
+        if (readBytes != mesh.header.face_cnt) {
+            print_err("Failed to read mesh faces.");
+            return 1;
+        }
         mesh.lod_offsets = new uint[mesh.header.lod_offset_cnt];
         readBytes=fread(mesh.lod_offsets,4,mesh.header.lod_offset_cnt,fd);
         if (readBytes!=mesh.header.lod_offset_cnt) {
