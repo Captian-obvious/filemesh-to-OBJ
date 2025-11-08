@@ -333,14 +333,14 @@ int main(int argc,char** argv){
         if (argv[i]==std::string("--no-output")){
             print_info("No output flag detected, exiting after parsing.");
             no_output=true;
-        }else if(argv[i]==std::string("-h") or argv[i]==std::string("--help")){
-            print_usage(argv);
-            return 0;
         }else if(argv[i]==std::string("--no-preserve-LOD")){
             preserve_LOD=false;
         }else if(argv[i]==std::string("-o")){
             outputOffset=i+1;
             i++; //skip next arg as its the output path
+        }else if(argv[i]==std::string("-h") or argv[i]==std::string("--help")){
+            print_usage(argv);
+            return 0;
         };
     };
     FILE* fd=fopen(path.c_str(), "rb");
