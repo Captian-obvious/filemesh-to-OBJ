@@ -288,7 +288,7 @@ std::string convert_to_obj(mesh5& mesh,bool preserve_LOD){
             meshesWritten++;
             uint startOffset=mesh.lod_offsets[i];
             uint endOffset=(i+1<mesh.header.lod_offset_cnt) ? mesh.lod_offsets[i+1] : mesh.header.face_cnt;
-            print_info(std::to_string(endOffset),std::to_string(startOffset));
+            print_info(std::to_string(endOffset)+" "+std::to_string(startOffset));
             if (i>0){
                 objData+="# LOD Mesh "+std::to_string(i)+" faces commented out.\n";
             };
