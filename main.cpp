@@ -288,10 +288,7 @@ std::string convert_to_obj(mesh5& mesh,bool preserve_LOD){
             meshesWritten++;
             uint startOffset=mesh.lod_offsets[i];
             uint endOffset=(i+1<mesh.header.lod_offset_cnt) ? mesh.lod_offsets[i+1] : mesh.header.face_cnt;
-            if (startOffset >= mesh.header.face_cnt || endOffset > mesh.header.face_cnt || startOffset > endOffset) {
-                print_err("Invalid LOD offset range: " + std::to_string(startOffset) + " to " + std::to_string(endOffset));
-                continue; // or return 1;
-            };
+            print_info(std::to_string(endOffset),std::to_string(startOffset));
             if (i>0){
                 objData+="# LOD Mesh "+std::to_string(i)+" faces commented out.\n";
             };
