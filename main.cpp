@@ -339,7 +339,7 @@ int main(int argc,char** argv){
             no_output=true;
         }else if(argv[i]==std::string("--no-preserve-LOD")){
             preserve_LOD=false;
-        }else if(argv[i]==std::string("-o")){
+        }else if(argv[i]==std::string("-o") || argv[i]==std::string("-out") || argv[i]==std::string("--out") || argv[i]==std::string("--outfile")){
             outputOffset=i+1;
             i++; //skip next arg as its the output path
         }else if(argv[i]==std::string("-h") or argv[i]==std::string("--help")){
