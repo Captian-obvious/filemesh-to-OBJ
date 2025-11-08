@@ -165,7 +165,7 @@ typedef struct {
     meshBone* bones;
     byte* bone_names;
     meshSubset* subsets;
-    
+
 } mesh5;
 
 void print_info(std::string msg){
@@ -237,6 +237,43 @@ std::string convert_to_obj(mesh3& mesh,bool preserve_LOD){
     return objData;
 };
 std::string convert_to_obj(mesh4& mesh,bool preserve_LOD){
+    std::string objData="# Generated from FileMesh v4.00/v4.01\n";
+    for (uint i=0;i<mesh.header.vert_cnt;i++){
+        objData+="v "+std::to_string(mesh.verts[i].px)+" "+std::to_string(mesh.verts[i].py)+" "+std::to_string(mesh.verts[i].pz)+" "+std::to_string(mesh.verts[i].r)+" "+std::to_string(mesh.verts[i].g)+" "+std::to_string(mesh.verts[i].b)+"\n# alpha: "+std::to_string(mesh.verts[i].a)+"\n";
+        objData+="vn "+std::to_string(mesh.verts[i].nx)+" "+std::to_string(mesh.verts[i].ny)+" "+std::to_string(mesh.verts[i].nz)+""+"\n";
+        objData+="vt "+std::to_string(mesh.verts[i].tu)+" "+std::to_string(mesh.verts[i].tv)+"\n";
+    };
+    if (preserve_LOD){
+        int meshesWritten=0;
+        for (uint i=0;i<mesh.header.lod_offset_cnt;i++){
+            objData+="# LOD Mesh "+std::to_string(i)+" Offset: "+std::to_string(mesh.lod_offsets[i])+"\n";
+            meshesWritten++;
+            uint startOffset=mesh.lod_offsets[i];
+            uint endOffset=(i+1<mesh.header.lod_offset_cnt) ? mesh.lod_offsets[i+1] : mesh.header.face_cnt;
+            if (i>0){
+                objData+="# LOD Mesh "+std::to_string(i)+" faces commented out.\n";
+            };
+            for (uint mi=startOffset;mi<endOffset;mi++){
+                if (i>0){
+                    objData+="# ";
+                };
+                objData+="f "+std::to_string(mesh.faces[mi].a+1)+"/"+std::to_string(mesh.faces[mi].a+1)+"/"+std::to_string(mesh.faces[mi].a+1)+" "+
+                                std::to_string(mesh.faces[mi].b+1)+"/"+std::to_string(mesh.faces[mi].b+1)+"/"+std::to_string(mesh.faces[mi].b+1)+" "+
+                                std::to_string(mesh.faces[mi].c+1)+"/"+std::to_string(mesh.faces[mi].c+1)+"/"+std::to_string(mesh.faces[mi].c+1)+"\n";
+            };
+        };
+    }else{
+        uint startOffset=mesh.lod_offsets[0];
+        uint endOffset=(1<mesh.header.lod_offset_cnt) ? mesh.lod_offsets[1] : mesh.header.face_cnt;
+        for (uint mi=startOffset;mi<endOffset;mi++){
+            objData+="f "+std::to_string(mesh.faces[mi].a+1)+"/"+std::to_string(mesh.faces[mi].a+1)+"/"+std::to_string(mesh.faces[mi].a+1)+" "+
+                            std::to_string(mesh.faces[mi].b+1)+"/"+std::to_string(mesh.faces[mi].b+1)+"/"+std::to_string(mesh.faces[mi].b+1)+" "+
+                            std::to_string(mesh.faces[mi].c+1)+"/"+std::to_string(mesh.faces[mi].c+1)+"/"+std::to_string(mesh.faces[mi].c+1)+"\n";
+        };
+    };
+    return objData;
+};
+std::string convert_to_obj(mesh5& mesh,bool preserve_LOD){
     std::string objData="# Generated from FileMesh v4.00/v4.01\n";
     for (uint i=0;i<mesh.header.vert_cnt;i++){
         objData+="v "+std::to_string(mesh.verts[i].px)+" "+std::to_string(mesh.verts[i].py)+" "+std::to_string(mesh.verts[i].pz)+" "+std::to_string(mesh.verts[i].r)+" "+std::to_string(mesh.verts[i].g)+" "+std::to_string(mesh.verts[i].b)+"\n# alpha: "+std::to_string(mesh.verts[i].a)+"\n";
@@ -458,6 +495,57 @@ int main(int argc,char** argv){
         fclose(fd);
     }else if(version=="4.00" or version=="4.01"){
         mesh4 mesh;
+        size_t readBytes=fread(&mesh.header,sizeof(mesh4Head),1,fd);
+        mesh.verts=new meshVertex[mesh.header.vert_cnt];
+        readBytes=fread(mesh.verts,sizeof(meshVertex),mesh.header.vert_cnt,fd);
+        if (mesh.header.bone_cnt>0){
+            mesh.skinning=new meshSkinning[mesh.header.vert_cnt];
+            readBytes=fread(mesh.skinning,sizeof(meshSkinning),mesh.header.vert_cnt,fd);
+        };
+        mesh.faces=new meshFace[mesh.header.face_cnt];
+        print_info("Polygon Count (triangles): "+std::to_string(mesh.header.face_cnt));
+        readBytes=fread(mesh.faces,sizeof(meshFace),mesh.header.face_cnt,fd);
+        mesh.lod_offsets = new uint[mesh.header.lod_offset_cnt];
+        readBytes=fread(mesh.lod_offsets,4,mesh.header.lod_offset_cnt,fd);
+        if (readBytes!=mesh.header.lod_offset_cnt) {
+            print_err("Failed to read LOD offsets.");
+            return 1;
+        };
+        mesh.bones=new meshBone[mesh.header.bone_cnt];
+        readBytes=fread(mesh.bones,sizeof(meshBone),mesh.header.bone_cnt,fd);
+        if (readBytes!=mesh.header.bone_cnt) {
+            print_err("Failed to read bones.");
+            return 1;
+        };
+        mesh.bone_names=new byte[mesh.header.sizeof_bone_names];
+        readBytes=fread(mesh.bone_names,mesh.header.sizeof_bone_names,1,fd);
+        mesh.subsets=new meshSubset[mesh.header.subset_cnt];
+        readBytes=fread(mesh.subsets,sizeof(meshSubset),mesh.header.subset_cnt,fd);
+        std::string objData=convert_to_obj(mesh,preserve_LOD);
+        if (!no_output){
+            if (argc>=3){
+                std::string outPath=argv[outputOffset];
+                FILE* outFd=fopen(outPath.c_str(),"w");
+                if (!outFd){
+                    print_err("Failed to open output file "+outPath);
+                }else{
+                    fwrite(objData.c_str(),1,objData.size(),outFd);
+                    fclose(outFd);
+                    print_info("OBJ file written to "+outPath);
+                };
+            }else{
+                std::cout << objData << std::endl;
+            };
+        };
+        delete[] mesh.verts;
+        delete[] mesh.faces;
+        delete[] mesh.lod_offsets;
+        delete[] mesh.bones;
+        delete[] mesh.bone_names;
+        delete[] mesh.subsets;
+        fclose(fd);
+    }else if(version=="5.00"){
+        mesh5 mesh;
         size_t readBytes=fread(&mesh.header,sizeof(mesh4Head),1,fd);
         mesh.verts=new meshVertex[mesh.header.vert_cnt];
         readBytes=fread(mesh.verts,sizeof(meshVertex),mesh.header.vert_cnt,fd);
