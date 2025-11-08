@@ -304,6 +304,7 @@ std::string convert_to_obj(mesh5& mesh,bool preserve_LOD){
     }else{
         uint startOffset=mesh.lod_offsets[0];
         uint endOffset=(1<mesh.header.lod_offset_cnt) ? mesh.lod_offsets[1] : mesh.header.face_cnt;
+        print_info(std::to_string(endOffset)+" "+std::to_string(startOffset));
         for (uint mi=startOffset;mi<endOffset;mi++){
             objData+="f "+std::to_string(mesh.faces[mi].a+1)+"/"+std::to_string(mesh.faces[mi].a+1)+"/"+std::to_string(mesh.faces[mi].a+1)+" "+
                             std::to_string(mesh.faces[mi].b+1)+"/"+std::to_string(mesh.faces[mi].b+1)+"/"+std::to_string(mesh.faces[mi].b+1)+" "+
