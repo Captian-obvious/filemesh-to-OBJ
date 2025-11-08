@@ -536,7 +536,7 @@ int main(int argc,char** argv){
             return 1;
         };
         mesh.bone_names=new byte[mesh.header.sizeof_bone_names];
-        readBytes=fread(mesh.bone_names,mesh.header.sizeof_bone_names,1,fd);
+        readBytes=fread(mesh.bone_names,1,mesh.header.sizeof_bone_names,fd);
         if (readBytes!=mesh.header.sizeof_bone_names) {
             print_err("Failed to read bone metadata.");
             return 1;
@@ -607,8 +607,7 @@ int main(int argc,char** argv){
             return 1;
         };
         mesh.bone_names=new byte[mesh.header.sizeof_bone_names];
-        readBytes=fread(mesh.bone_names,mesh.header.sizeof_bone_names,1,fd);
-        print_info(std::to_string(readBytes));
+        readBytes=fread(mesh.bone_names,1,mesh.header.sizeof_bone_names,fd);
         if (readBytes!=mesh.header.sizeof_bone_names) {
             print_err("Failed to read bone metadata.");
             return 1;
