@@ -409,8 +409,8 @@ int main(int argc,char** argv){
         mesh.faces=new meshFace[mesh.header.face_cnt];
         print_info("Polygon Count (triangles): "+std::to_string(mesh.header.face_cnt));
         readBytes=fread(mesh.faces,sizeof(meshFace),mesh.header.face_cnt,fd);
-        std::string objData=convert_to_obj(mesh);
         if (!no_output){
+            std::string objData=convert_to_obj(mesh);
             if (argc>=3){
                 std::string outPath=argv[outputOffset];
                 FILE* outFd=fopen(outPath.c_str(),"w");
@@ -475,8 +475,8 @@ int main(int argc,char** argv){
             print_err("Failed to read LOD offsets.");
             return 1;
         };
-        std::string objData=convert_to_obj(mesh,preserve_LOD);
         if (!no_output){
+            std::string objData=convert_to_obj(mesh,preserve_LOD);
             if (argc>=3){
                 std::string outPath=argv[outputOffset];
                 FILE* outFd=fopen(outPath.c_str(),"w");
@@ -547,8 +547,8 @@ int main(int argc,char** argv){
             print_err("Failed to read subsets.");
             return 1;
         };
-        std::string objData=convert_to_obj(mesh,preserve_LOD);
         if (!no_output){
+            std::string objData=convert_to_obj(mesh,preserve_LOD);
             if (argc>=3){
                 std::string outPath=argv[outputOffset];
                 FILE* outFd=fopen(outPath.c_str(),"w");
@@ -586,7 +586,6 @@ int main(int argc,char** argv){
                 print_err("Failed to read skinning.");
                 return 1;
             };
-            print_info(std::to_string(ftell(fd)));
         };
         mesh.faces=new meshFace[mesh.header.face_cnt];
         print_info("Polygon Count (triangles): "+std::to_string(mesh.header.face_cnt));
@@ -595,37 +594,32 @@ int main(int argc,char** argv){
             print_err("Failed to read faces.");
             return 1;
         };
-        print_info(std::to_string(ftell(fd)));
         mesh.lod_offsets = new uint[mesh.header.lod_offset_cnt];
         readBytes=fread(mesh.lod_offsets,4,mesh.header.lod_offset_cnt,fd);
         if (readBytes!=mesh.header.lod_offset_cnt) {
             print_err("Failed to read LOD offsets.");
             return 1;
         };
-        print_info(std::to_string(ftell(fd)));
         mesh.bones=new meshBone[mesh.header.bone_cnt];
         readBytes=fread(mesh.bones,sizeof(meshBone),mesh.header.bone_cnt,fd);
         if (readBytes!=mesh.header.bone_cnt) {
             print_err("Failed to read bones.");
             return 1;
         };
-        print_info(std::to_string(ftell(fd)));
         mesh.bone_names=new byte[mesh.header.sizeof_bone_names];
         readBytes=fread(mesh.bone_names,1,mesh.header.sizeof_bone_names,fd);
         if (readBytes!=mesh.header.sizeof_bone_names) {
             print_err("Failed to read bone metadata.");
             return 1;
         };
-        print_info(std::to_string(ftell(fd)));
         mesh.subsets=new meshSubset[mesh.header.subset_cnt];
         readBytes=fread(mesh.subsets,sizeof(meshSubset),mesh.header.subset_cnt,fd);
         if (readBytes!=mesh.header.subset_cnt) {
             print_err("Failed to read subsets.");
             return 1;
         };
-        print_info(std::to_string(ftell(fd)));
-        std::string objData=convert_to_obj(mesh,preserve_LOD);
         if (!no_output){
+            std::string objData=convert_to_obj(mesh,preserve_LOD);
             if (argc>=3){
                 std::string outPath=argv[outputOffset];
                 FILE* outFd=fopen(outPath.c_str(),"w");
