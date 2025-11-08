@@ -626,6 +626,7 @@ int main(int argc,char** argv){
         if (mesh.header.facs_dat_size > 0 && mesh.header.facs_dat_form == 1) {
             fseek(fd,mesh.header.facs_dat_size,SEEK_CUR); // skip the FACS blob
         };
+        print_info(std::to_string(ftell(fd)));
         /*if (!no_output){
             std::string objData=convert_to_obj(mesh,preserve_LOD);
             if (argc>=3){
