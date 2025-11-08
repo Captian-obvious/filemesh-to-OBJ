@@ -281,7 +281,6 @@ std::string convert_to_obj(mesh5& mesh,bool preserve_LOD){
         objData+="vn "+std::to_string(mesh.verts[i].nx)+" "+std::to_string(mesh.verts[i].ny)+" "+std::to_string(mesh.verts[i].nz)+""+"\n";
         objData+="vt "+std::to_string(mesh.verts[i].tu)+" "+std::to_string(mesh.verts[i].tv)+"\n";
     };
-    std::cout << "Reading vertextes: " << mesh.header.vert_cnt << std::endl;
     if (preserve_LOD){
         int meshesWritten=0;
         for (uint i=0;i<mesh.header.lod_offset_cnt;i++){
@@ -289,6 +288,10 @@ std::string convert_to_obj(mesh5& mesh,bool preserve_LOD){
             meshesWritten++;
             uint startOffset=mesh.lod_offsets[i];
             uint endOffset=(i+1<mesh.header.lod_offset_cnt) ? mesh.lod_offsets[i+1] : mesh.header.face_cnt;
+            if (startOffset >= mesh.header.face_cnt || endOffset > mesh.header.face_cnt || startOffset > endOffset) {
+                print_err("Invalid LOD offset range: " + std::to_string(startOffset) + " to " + std::to_string(endOffset));
+                continue; // or return 1;
+            };
             if (i>0){
                 objData+="# LOD Mesh "+std::to_string(i)+" faces commented out.\n";
             };
