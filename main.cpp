@@ -273,8 +273,10 @@ std::string convert_to_obj(mesh4& mesh,bool preserve_LOD){
     };
     return objData;
 };
+
 std::string convert_to_obj(mesh5& mesh,bool preserve_LOD){
     std::string objData="# Generated from FileMesh v5.00\n";
+    std::cout << "Reading vertextes" << std::endl;
     for (uint i=0;i<mesh.header.vert_cnt;i++){
         objData+="v "+std::to_string(mesh.verts[i].px)+" "+std::to_string(mesh.verts[i].py)+" "+std::to_string(mesh.verts[i].pz)+" "+std::to_string(mesh.verts[i].r)+" "+std::to_string(mesh.verts[i].g)+" "+std::to_string(mesh.verts[i].b)+"\n# alpha: "+std::to_string(mesh.verts[i].a)+"\n";
         objData+="vn "+std::to_string(mesh.verts[i].nx)+" "+std::to_string(mesh.verts[i].ny)+" "+std::to_string(mesh.verts[i].nz)+""+"\n";
@@ -572,7 +574,6 @@ int main(int argc,char** argv){
         readBytes=fread(mesh.bone_names,mesh.header.sizeof_bone_names,1,fd);
         mesh.subsets=new meshSubset[mesh.header.subset_cnt];
         readBytes=fread(mesh.subsets,sizeof(meshSubset),mesh.header.subset_cnt,fd);
-        print_info("we got here");
         std::string objData=convert_to_obj(mesh,preserve_LOD);
         if (!no_output){
             if (argc>=3){
