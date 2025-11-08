@@ -43,6 +43,7 @@ typedef struct {
     byte hq_lod_cnt;
     byte unused;
 } mesh4Head;
+
 typedef struct {
     unsigned short sizeof_mesh4Head;
     unsigned short lod_type;
