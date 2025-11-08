@@ -157,7 +157,7 @@ typedef struct {
     meshSubset* subsets;
 } mesh4;
 typedef struct {
-    mesh4Head header;
+    mesh5Head header;
     meshVertex* verts;
     meshSkinning* skinning;
     meshFace* faces;
@@ -165,7 +165,7 @@ typedef struct {
     meshBone* bones;
     byte* bone_names;
     meshSubset* subsets;
-
+    
 } mesh5;
 
 void print_info(std::string msg){
