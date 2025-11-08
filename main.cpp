@@ -619,6 +619,9 @@ int main(int argc,char** argv){
             print_err("Failed to read subsets.");
             return 1;
         };
+        if (mesh.header.facs_dat_size > 0 && mesh.header.facs_dat_form == 1) {
+            fseek(fd,mesh.header.facs_dat_size,SEEK_CUR); // skip the FACS blob
+        };
         if (!no_output){
             std::string objData=convert_to_obj(mesh,preserve_LOD);
             if (argc>=3){
