@@ -556,11 +556,8 @@ int main(int argc,char** argv){
         mesh.faces=new meshFace[mesh.header.face_cnt];
         print_info("Polygon Count (triangles): "+std::to_string(mesh.header.face_cnt));
         readBytes=fread(mesh.faces,sizeof(meshFace),mesh.header.face_cnt,fd);
-        if (readBytes != mesh.header.face_cnt) {
-            print_err("Failed to read mesh faces.");
-            return 1;
-        }
         mesh.lod_offsets = new uint[mesh.header.lod_offset_cnt];
+        print_info("we got here");
         readBytes=fread(mesh.lod_offsets,4,mesh.header.lod_offset_cnt,fd);
         if (readBytes!=mesh.header.lod_offset_cnt) {
             print_err("Failed to read LOD offsets.");
