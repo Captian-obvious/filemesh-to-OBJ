@@ -45,7 +45,7 @@ typedef struct {
 } mesh4Head;
 
 typedef struct {
-    unsigned short sizeof_mesh4Head;
+    unsigned short sizeof_mesh5Head;
     unsigned short lod_type;
     uint vert_cnt;
     uint face_cnt;
