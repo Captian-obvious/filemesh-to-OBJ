@@ -281,10 +281,6 @@ std::string convert_to_obj(mesh4& mesh,bool preserve_LOD){
 std::string convert_to_obj(mesh5& mesh,bool preserve_LOD){
     std::string objData="# Generated from FileMesh v5.00\n";
     for (uint i=0;i<mesh.header.vert_cnt;i++){
-        if (i>mesh.header.vert_cnt){
-            print_err("Vertex index out of bounds: "+std::to_string(i));
-            break;
-        };
         meshVertex v=mesh.verts[i];
         objData+="v "+std::to_string(v.px)+" "+std::to_string(v.py)+" "+std::to_string(v.pz)+" "+std::to_string(v.r)+" "+std::to_string(v.g)+" "+std::to_string(v.b)+"\n# alpha: "+std::to_string(v.a)+"\n";
         objData+="vn "+std::to_string(v.nx)+" "+std::to_string(v.ny)+" "+std::to_string(v.nz)+""+"\n";
@@ -632,7 +628,7 @@ int main(int argc,char** argv){
             fseek(fd,mesh.header.facs_dat_size,SEEK_CUR); // skip the FACS blob
         };
         print_info(std::to_string(ftell(fd)));
-        if (!no_output){
+        /*if (!no_output){
             std::string objData=convert_to_obj(mesh,preserve_LOD);
             if (argc>=3){
                 std::string outPath=argv[outputOffset];
@@ -647,7 +643,7 @@ int main(int argc,char** argv){
             }else{
                 std::cout << objData << std::endl;
             };
-        };
+        };*/
         delete[] mesh.verts;
         delete[] mesh.faces;
         delete[] mesh.lod_offsets;
