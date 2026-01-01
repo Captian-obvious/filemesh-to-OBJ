@@ -183,6 +183,32 @@ void print_err(std::string msg){
     std::cout << msg << std::endl;
 };
 
+meshChunk read_chunk(FILE* fd){
+    meshChunk chunk;
+    size_t readBytes=fread(&chunk.chunk_type,1,8,fd);
+    if (readBytes!=8){
+        print_err("Failed to read chunk type.");
+        exit(1);
+    };
+    readBytes=fread(&chunk.chunk_version,4,1,fd);
+    if (readBytes!=1){
+        print_err("Failed to read chunk version.");
+        exit(1);
+    };
+    readBytes=fread(&chunk.size,4,1,fd);
+    if (readBytes!=1){
+        print_err("Failed to read chunk size.");
+        exit(1);
+    };
+    chunk.data=new byte[chunk.size];
+    readBytes=fread(chunk.data,1,chunk.size,fd);
+    if (readBytes!=chunk.size){
+        print_err("Failed to read chunk data.");
+        exit(1);
+    };
+    return chunk;
+};
+
 std::vector<std::string> split(const std::string &s,const char separator=' '){
     std::vector<std::string> tokens;
     std::string token;
