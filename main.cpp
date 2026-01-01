@@ -138,7 +138,7 @@ typedef struct {
     byte chunk_type[8];
     uint chunk_version;
     uint size;
-    byte data*;
+    byte* data;
 } meshChunk;
 
 typedef struct {
