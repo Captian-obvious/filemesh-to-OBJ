@@ -630,7 +630,7 @@ int main(int argc,char** argv){
             fseek(fd,mesh.header.facs_dat_size,SEEK_CUR); // skip the FACS blob
         };
         print_info(std::to_string(ftell(fd)));
-        if (!no_output){
+        /*if (!no_output){
             std::string objData=convert_to_obj(mesh,preserve_LOD);
             if (argc>=3){
                 std::string outPath=argv[outputOffset];
@@ -645,7 +645,7 @@ int main(int argc,char** argv){
             }else{
                 std::cout << objData << std::endl;
             };
-        };
+        };*/
         delete[] mesh.verts;
         delete[] mesh.faces;
         delete[] mesh.lod_offsets;
