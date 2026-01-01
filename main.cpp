@@ -504,12 +504,13 @@ int main(int argc,char** argv){
     }else if(version=="4.00" or version=="4.01"){
         mesh4 mesh;
         size_t readBytes=fread(&mesh.header,sizeof(mesh4Head),1,fd);
-        mesh.verts=new meshVertex[mesh.header.vert_cnt];
-        readBytes=fread(mesh.verts,sizeof(meshVertex),mesh.header.vert_cnt,fd);
+        meshVertex* verts=new meshVertex[mesh.header.vert_cnt];
+        readBytes=fread(verts,sizeof(meshVertex),mesh.header.vert_cnt,fd);
         if (readBytes!=mesh.header.vert_cnt) {
             print_err("Failed to read vertexes.");
             return 1;
         };
+        mesh.verts=verts;
         if (mesh.header.bone_cnt>0){
             mesh.skinning=new meshSkinning[mesh.header.vert_cnt];
             readBytes=fread(mesh.skinning,sizeof(meshSkinning),mesh.header.vert_cnt,fd);
@@ -579,12 +580,13 @@ int main(int argc,char** argv){
     }else if(version=="5.00"){
         mesh5 mesh;
         size_t readBytes=fread(&mesh.header,sizeof(mesh5Head),1,fd);
-        mesh.verts=new meshVertex[mesh.header.vert_cnt];
-        readBytes=fread(mesh.verts,sizeof(meshVertex),mesh.header.vert_cnt,fd);
+        meshVertex* verts=new meshVertex[mesh.header.vert_cnt];
+        readBytes=fread(verts,sizeof(meshVertex),mesh.header.vert_cnt,fd);
         if (readBytes!=mesh.header.vert_cnt) {
             print_err("Failed to read vertexes.");
             return 1;
         };
+        mesh.verts=verts;
         if (mesh.header.bone_cnt>0){
             mesh.skinning=new meshSkinning[mesh.header.vert_cnt];
             readBytes=fread(mesh.skinning,sizeof(meshSkinning),mesh.header.vert_cnt,fd);
@@ -628,7 +630,7 @@ int main(int argc,char** argv){
             fseek(fd,mesh.header.facs_dat_size,SEEK_CUR); // skip the FACS blob
         };
         print_info(std::to_string(ftell(fd)));
-        /*if (!no_output){
+        if (!no_output){
             std::string objData=convert_to_obj(mesh,preserve_LOD);
             if (argc>=3){
                 std::string outPath=argv[outputOffset];
@@ -643,7 +645,7 @@ int main(int argc,char** argv){
             }else{
                 std::cout << objData << std::endl;
             };
-        };*/
+        };
         delete[] mesh.verts;
         delete[] mesh.faces;
         delete[] mesh.lod_offsets;
